@@ -1,12 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import Navigator from "./navigator";
+import NavigationButtons from "./components/NavigationButtons";
+import Home from "./screens/Home";
+import SecondScreen from "./screens/SecondScreen";
 
 export default function App() {
+  const [currentRoute, setCurrentRoute] = useState('Home');
+
+  const screens = [
+    {component: Home, params: '', route: 'Home', options: {}},
+    {component: SecondScreen, params: '', route: 'SecondScreen', options: {}},
+  ];
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <Navigator route={currentRoute} screens={screens} />
+      <NavigationButtons currentRoute={currentRoute} onPress={setCurrentRoute} />
     </View>
   );
 }
@@ -14,8 +24,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#fafafa',
+    justifyContent: 'space-between',
   },
 });
