@@ -4,13 +4,13 @@ import React from "react";
 const Button = ({ text, onPress, disable, styles = {} }) => {
   const Component = disable ? View : TouchableOpacity;
   return (
-	<Component onPress={onPress} style={[defaultStyles.container, styles.container]}>
-	  <Text style={[defaultStyles.text, styles.text]}>{text}</Text>
+	<Component onPress={onPress} style={[buttonStyles.container, styles.container]}>
+	  <Text style={[buttonStyles.text, styles.text]}>{text}</Text>
 	</Component>
   );
 }
 
-const defaultStyles = StyleSheet.create({
+const buttonStyles = StyleSheet.create({
   container: {
 		flex: 1,
 		backgroundColor: '#44b5c0',

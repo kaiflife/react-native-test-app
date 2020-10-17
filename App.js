@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Navigator from "./navigator";
-import NavigationButtons from "./components/NavigationButtons";
+import Navbar from "./components/Navbar";
 import Home from "./screens/Home";
 import SecondScreen from "./screens/SecondScreen";
+
+const buttons = [
+  {route: 'Home', text: 'Home', styles: '', visible: true},
+  {route: 'SecondScreen', text: 'Second Screen', styles: '', visible: true},
+];
 
 export default function App() {
   const [currentRoute, setCurrentRoute] = useState('Home');
@@ -16,7 +21,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Navigator route={currentRoute} screens={screens} />
-      <NavigationButtons currentRoute={currentRoute} onPress={setCurrentRoute} />
+      <Navbar buttons={buttons} currentRoute={currentRoute} onPress={setCurrentRoute} />
     </View>
   );
 }
