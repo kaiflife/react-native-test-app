@@ -4,7 +4,8 @@ import {
 } from "../actions/styles/action";
 
 const initialState = {
-	currentTheme: 'dark',
+	currentThemeName: 'dark',
+	currentTheme: {},
 	areFontsReady: false,
 };
 
@@ -15,7 +16,11 @@ const navigationReducer = (state = initialState, action) => {
 			return {...state, areFontsReady: true};
 		}
 		case CHANGE_CURRENT_THEME: {
-			return  {...state, currentTheme: payload}
+			return  {
+				...state,
+				currentTheme: payload.theme,
+				currentThemeName: payload.themeName
+			};
 		}
 		default:
 			return state

@@ -1,4 +1,10 @@
-# (START) HOW TO ADD CUSTOM FONTS
+# IF YOU HAVE NO AUTOLINKING
+Put it in terminal
+`cd ios && pod install && cd ..`
+
+That's it :D
+
+# HOW TO ADD CUSTOM FONTS
 1. First step (Set Font Naming For Cross Platform)
 
 2. Add Fonts to Assets
@@ -11,7 +17,7 @@
     		ios: {},
     		android: {},
     	},
-    	assets: ['./assets/fonts/'], //react-native link to activate link for assets/fonts
+    	assets: ['.src/assets/fonts/'], //react-native link to activate link for assets/fonts
     };`
     3) In package.json add this
     `"rnpm": {
@@ -19,4 +25,11 @@
         "android": {},
         "assets": ["./assets"]
       },`
-# (END) HOW TO ADD CUSTOM FONTS
+
+# HOW TO ADD SVGS
+1) `yarn add react-native-svg`
+2) `react-native link react-native-svg`
+
+# HOW TO ADD ASYNC STORAGE
+1) `yarn add @react-native-async-storage/async-storage`
+2) `react-native link @react-native-async-storage/async-storage`

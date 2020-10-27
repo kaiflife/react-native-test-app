@@ -3,5 +3,5 @@ module.exports = {
 		ios: {},
 		android: {},
 	},
-	assets: ['./assets/fonts/'], //react-native link to activate link for assets/fonts
+	assets: ['.src/assets/fonts/'], //react-native link to activate link for assets/fonts
 };
