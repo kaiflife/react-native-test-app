@@ -1,0 +1,1 @@
+export const GET_TASKS_FAILED = 'GET_TASKS_FAILED';

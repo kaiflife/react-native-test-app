@@ -53,11 +53,13 @@ const AuthScreen = () => {
 		)
 	});
 
+	const disabledButton = !email.length || !password.length;
+
 	return (
 		<View style={styles.container}>
 			<CustomFontText propsStyles={{color: 'black', marginBottom: 20}} text={languageWords.login} />
 			{inputsComponent}
-			<CustomButton onPress={sendAuthData} text={languageWords.authorize} />
+			<CustomButton disable={disabledButton} onPress={sendAuthData} text={languageWords.authorize} />
 		</View>
 	);
 };

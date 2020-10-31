@@ -41,7 +41,7 @@ export default function App() {
     const HomeStack = createStackNavigator();
     return (
       <HomeStack.Navigator initialScreen='Authorization' headerMode='none'>
-        <HomeStack.Screen name='Registration' component={Settings} />
+        <HomeStack.Screen name='Settings' component={Settings} />
       </HomeStack.Navigator>
     )
   };

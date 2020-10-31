@@ -4,8 +4,14 @@ const usersRoute = `${apiUrl}/users`;
 
 const authUrl = `${usersRoute}/auth`;
 const registrationUrl = `${usersRoute}/registration`;
+const tasksUrl = `${apiUrl}/tasks`;
+const columnsUrl = `${apiUrl}/columns`;
+const boardsUrl = `${apiUrl}/boards`;
 
 export {
   authUrl,
   registrationUrl,
+  columnsUrl,
+  tasksUrl,
+  boardsUrl,
 };

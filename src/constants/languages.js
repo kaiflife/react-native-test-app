@@ -3,22 +3,20 @@ const instructions = 'instructions';
 const invalid = 'invalid';
 const alreadyExist = 'already exist';
 
-const USER_NOT_FOUND = `user ${notFound}`;
-const BOARD_NOT_FOUND = `board ${notFound}`;
-const COLUMN_NOT_FOUND = `column ${notFound}`;
-const TASK_NOT_FOUND = `task ${notFound}`;
-const SOMETHING_WENT_WRONG = 'something went wrong';
-const INVALID_PASSWORD = `${invalid} password`;
-const INVALID_TOKEN = `${invalid} token`;
-const EMAIL_EXISTS = `email ${alreadyExist}`;
-
-const PASSWORD_INSTRUCTIONS = `password ${instructions}`;
-const FULL_NAME_INSTRUCTIONS = `fullName ${instructions}`;
-const EMAIL_INSTRUCTIONS = `email ${instructions}`;
-
-const DELETED_BOARD_FROM_LIST = 'board was deleted from your list';
-const DELETED_BOARD = 'board was deleted';
-const EMPTY_DATA = 'empty data';
+export const USER_NOT_FOUND = `user ${notFound}`;
+export const BOARD_NOT_FOUND = `board ${notFound}`;
+export const COLUMN_NOT_FOUND = `column ${notFound}`;
+export const TASK_NOT_FOUND = `task ${notFound}`;
+export const SOMETHING_WENT_WRONG = 'something went wrong';
+export const INVALID_PASSWORD = `${invalid} password`;
+export const INVALID_TOKEN = `${invalid} token`;
+export const EMAIL_EXISTS = `email ${alreadyExist}`;
+export const PASSWORD_INSTRUCTIONS = `password ${instructions}`;
+export const FULL_NAME_INSTRUCTIONS = `fullName ${instructions}`;
+export const EMAIL_INSTRUCTIONS = `email ${instructions}`;
+export const DELETED_BOARD_FROM_LIST = 'board was deleted from your list';
+export const DELETED_BOARD = 'board was deleted';
+export const EMPTY_DATA = 'empty data';
 
 const languages = {
   ru: {

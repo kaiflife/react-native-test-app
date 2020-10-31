@@ -1,0 +1,1 @@
+export const GET_COLUMNS_FAILED = 'GET_COLUMNS_FAILED';

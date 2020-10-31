@@ -24,11 +24,10 @@ const theme = {
       backgroundColor: 'orange',
     },
     appError: {
-      textAlign: 'center',
       width: '100%',
-      position: 'relative',
+      marginBottom: 5,
       color: 'red',
-      fontSize: 20,
+      fontSize: 16,
     },
     defaultText: {
       color: 'white',
