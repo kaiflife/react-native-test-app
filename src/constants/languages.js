@@ -20,7 +20,7 @@ export const EMPTY_DATA = 'empty data';
 
 const languages = {
   ru: {
-    authorize: 'Авторизоваться',
+    logIn: 'Авторизоваться',
     ready: 'Готово',
     cancel: 'Отмена',
     back: 'Назад',
@@ -31,9 +31,10 @@ const languages = {
     board: 'Доска',
     task: 'Задача',
     tasks: 'Задачи',
-    login: 'Страница авторизации',
+    authorize: 'Страница авторизации',
+    signUp: 'Регистрация',
     registration: 'Страница регистрации',
-    
+
     [USER_NOT_FOUND]: 'Пользователь не найден',
     [BOARD_NOT_FOUND]: 'Доска не найдена',
     [SOMETHING_WENT_WRONG]: 'Что-то пошло не так',
@@ -50,7 +51,7 @@ const languages = {
     [COLUMN_NOT_FOUND]: 'Колонка не найдена',
   },
   eng: {
-    authorize: 'Authorize',
+    signUp: 'Sign up',
     ready: 'Ready',
     cancel: 'Cancel',
     back: 'Go Back',
@@ -62,7 +63,8 @@ const languages = {
     boards: 'Boards',
     task: 'Task',
     tasks: 'Tasks',
-    login: 'Login page',
+    authorize: 'Login page',
+    signIn: 'Sign in',
     registration: 'Registration page',
     passwordInstructions: 'Пароль должен быть не менее 8 символов',
 

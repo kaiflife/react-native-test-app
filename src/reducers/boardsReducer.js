@@ -3,6 +3,7 @@ import {BOARDS_REQUEST_FAILED, CHANGE_BOARDS_DATA} from "../actions/boards/actio
 const initialState = {
 	boards: [],
 	users: [],
+	boardId: null,
 	error: '',
 };
 

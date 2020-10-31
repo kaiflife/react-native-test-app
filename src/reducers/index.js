@@ -1,14 +1,16 @@
 import { combineReducers } from 'redux'
-import theme from './themeReducer';
-import auth from './authReducer';
-import language from './languageReducer';
-import request from './requestReducer'
+import themeReducer from './themeReducer';
+import authReducer from './authReducer';
+import languageReducer from './languageReducer';
+import requestReducer from './requestReducer'
 import boardsReducer from "./boardsReducer";
+import modalReducer from "./modalReducer";
 
 export default combineReducers({
-	theme,
-	auth,
-	language,
-	request,
+	themeReducer,
+	authReducer,
+	languageReducer,
+	requestReducer,
 	boardsReducer,
+	modalReducer,
 });

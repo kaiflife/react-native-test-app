@@ -2,6 +2,7 @@ import {
 	AUTH_SUCCESS,
 	AUTH_REQUEST_FAILED,
 	CHANGE_AUTH_DATA,
+	CLEAR_AUTH_DATA,
 } from "../actions/auth/action";
 
 const initialState = {
@@ -30,6 +31,9 @@ const themeReducer = (state = initialState, action) => {
 				...state,
 				error: payload.error,
 			}
+		}
+		case CLEAR_AUTH_DATA: {
+			return initialState;
 		}
 		default:
 			return state

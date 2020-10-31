@@ -4,11 +4,20 @@ import CustomFontText from "./CustomFontText";
 import {useSelector} from "react-redux";
 
 const CustomButton = ({ text, onPress, disable, propsStyles = {} }) => {
-	const currentTheme = useSelector(state => state.theme.currentTheme);
+	const currentTheme = useSelector(state => state.themeReducer.currentTheme);
   const Component = !onPress || disable ? View : TouchableOpacity;
 
+  const disabledStyles = disable ? buttonStyles.disabledButton : {};
+
   return (
-	<Component onPress={onPress} style={{...buttonStyles.container, ...currentTheme.defaultButton, ...propsStyles.container}}>
+	<Component
+		onPress={onPress}
+		style={{
+			...buttonStyles.container,
+			...currentTheme.defaultButton,
+			...propsStyles.container,
+			...disabledStyles
+		}}>
 	  <CustomFontText text={text} propsStyles={{...buttonStyles.text, ...currentTheme.defaultText, ...propsStyles.text}} />
 	</Component>
   );
@@ -25,7 +34,10 @@ const buttonStyles = StyleSheet.create({
   text: {
 		color: 'white',
 		fontSize: 13,
-  }
+  },
+	disabledButton: {
+  	opacity: 0,
+	}
 });
 
 export default CustomButton;

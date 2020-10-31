@@ -1,11 +1,12 @@
 import axios from 'axios';
 import {authUrl, registrationUrl} from "../../constants/api";
-import {AUTH_REQUEST_FAILED} from "./action";
+import {AUTH_REQUEST_FAILED, CHANGE_AUTH_DATA, CLEAR_AUTH_DATA} from "./action";
 
 export const authRequest = () => (dispatch, getState) => {
   const { email, password } = getState().auth;
   try {
     return axios.post(authUrl, {email, password})
+      .then(result => dispatch(changeAuthData(result.response.data)))
       .catch(e => {
         dispatch({type: AUTH_REQUEST_FAILED, payload: {error: e.response.data.message}});
       });
@@ -26,3 +27,12 @@ export const registrationRequest = () => (dispatch, getState) => {
     console.error('error axios', e.message);
   }
 }
+
+export const changeAuthData = payload => {
+  return {
+    type: CHANGE_AUTH_DATA,
+    payload,
+  }
+}
+
+export const clearAuthData = () => ({type: CLEAR_AUTH_DATA});

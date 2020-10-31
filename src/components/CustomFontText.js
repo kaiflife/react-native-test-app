@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import {Text, StyleSheet} from "react-native";
 
 const CustomFontText = ({text = '', propsStyles = {}, fontFamily = ''}) => {
-	const currentTheme = useSelector(state => state.theme.currentTheme);
+	const currentTheme = useSelector(state => state.themeReducer.currentTheme);
 	const finalStyles = {
 		...fontTextStyles.lowFont,
 		...currentTheme.defaultText,

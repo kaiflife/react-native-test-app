@@ -2,7 +2,6 @@ import React, { useState, useEffect }  from 'react';
 import {StyleSheet, View} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {createStackNavigator} from "@react-navigation/stack";
 import {changeTheme} from "./helpers/addNewTheme";
 import {useDispatch, useSelector} from "react-redux";
 import {LoaderSvg} from "./components/Svgs";
@@ -13,14 +12,18 @@ import {CHANGE_CURRENT_LANGUAGE} from "./actions/language/action";
 import languages from "./constants/languages";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import Loader from "./components/Loader";
+import Modal from "./components/Modal";
+import SettingsScreen from "./screens/SettingsScreen";
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   const dispatch = useDispatch();
   const [isLoadingTheme, setIsLoadingTheme] = useState(true);
-  const isRequestLoading = useSelector(state => state.request.isRequestLoading);
-  const token = useSelector(state => state.auth.token);
+  const isRequestLoading = useSelector(state => state.requestReducer.isRequestLoading);
+  const boardId = useSelector(state => state.boardsReducer.boardId);
+  const isOpenedModal = useSelector(state => state.modalReducer.isOpenedModal);
+  const token = useSelector(state => state.authReducer.token);
 
   const preloadSettings = async () => {
     const languageName = await changeLanguage();
@@ -37,15 +40,6 @@ export default function App() {
       .catch(e => console.error('ERROR PRELOADING', e));
   }, []);
 
-  const Settings = () => {
-    const HomeStack = createStackNavigator();
-    return (
-      <HomeStack.Navigator initialScreen='Authorization' headerMode='none'>
-        <HomeStack.Screen name='Settings' component={Settings} />
-      </HomeStack.Navigator>
-    )
-  };
-
   const AuthNavigator = () => {
     return (
       <Tab.Navigator>
@@ -59,8 +53,8 @@ export default function App() {
     return (
       <Tab.Navigator>
         <Tab.Screen name='Boards' component={BoardsScreen} />
-        <Tab.Screen name='Board' component={BoardScreen} />
-        <Tab.Screen  name='Settings' component={Settings} />
+        <Tab.Screen name='Settings' component={SettingsScreen} />
+        {boardId && <Tab.Screen name='Board' component={BoardScreen} />}
       </Tab.Navigator>
     );
   }
@@ -73,6 +67,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      {isOpenedModal && <Modal />}
       {isRequestLoading && <Loader />}
       {isLoadingTheme ? <LoaderSvg /> : navigation}
     </View>

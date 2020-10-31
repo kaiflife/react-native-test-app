@@ -1,34 +1,29 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {View, StyleSheet, ScrollView} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
-import {CHANGE_AUTH_DATA} from "../actions/auth/action";
-import CustomButton from "../components/CustomButton";
 import {useNavigation} from '@react-navigation/native';
 import CustomFontText from "../components/CustomFontText";
-import {registrationRequest} from "../actions/auth";
 import {startRequestLoading} from "../actions/request";
-import {
-	BOARD_NOT_FOUND,
-	EMAIL_INSTRUCTIONS,
-	FULL_NAME_INSTRUCTIONS,
-	PASSWORD_INSTRUCTIONS
-} from "../constants/languages";
 import {createBoardRequest, getBoardsRequest} from "../actions/boards";
 import {TouchableOpacity} from "react-native-web";
 
 const BoardsScreen = () => {
 	const dispatch = useDispatch();
 	const navigation = useNavigation();
-	const isRequestLoading = useSelector(state => state.request.isRequestLoading);
-	const { email, password, firstName, lastName } = useSelector(state => state.auth);
+	const isRequestLoading = useSelector(state => state.requestReducer.isRequestLoading);
 	const boards = useSelector(state => state.boardsReducer.boards);
-	const languageWords = useSelector(state => state.language.languageWords);
-	const token = useSelector(state => state.auth.token);
-	const error = useSelector(state => state.auth.error);
+	const languageWords = useSelector(state => state.languageReducer.languageWords);
+	const token = useSelector(state => state.authReducer.token);
+
+	const onGetBoards = async () => {
+		dispatch(startRequestLoading(true));
+		await dispatch(getBoardsRequest());
+		dispatch(startRequestLoading(false));
+	}
 
 	useEffect(() => {
 		if(token) {
-			dispatch(getBoardsRequest());
+			onGetBoards();
 		}
 	}, [token]);
 
@@ -60,9 +55,8 @@ const BoardsScreen = () => {
 
 	return (
 		<ScrollView style={styles.container}>
-			<CustomFontText propsStyles={{color: 'black', marginBottom: 20}} text={languageWords.registration} />
-			{inputsComponent}
-			<CustomButton onPress={sendRegistrationData} text={languageWords.authorize} />
+			<CustomFontText propsStyles={{color: 'black', marginBottom: 20}} text={languageWords.boards} />
+			{boardsComponents}
 		</ScrollView>
 	);
 };

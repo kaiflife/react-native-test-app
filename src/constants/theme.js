@@ -16,6 +16,7 @@ const theme = {
       borderWidth: 2,
       padding: 10,
     },
+    modalContainer: {},
   },
   light: {
     defaultButton: {
@@ -40,6 +41,7 @@ const theme = {
       padding: 10,
     },
     defaultInputPlaceholder: 'gray',
+    modalContainer: {},
   }
 }
 

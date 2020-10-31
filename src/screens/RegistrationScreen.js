@@ -4,19 +4,20 @@ import {useDispatch, useSelector} from "react-redux";
 import CustomInput from "../components/CustomInput";
 import {CHANGE_AUTH_DATA} from "../actions/auth/action";
 import CustomButton from "../components/CustomButton";
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import CustomFontText from "../components/CustomFontText";
-import {registrationRequest} from "../actions/auth";
+import {clearAuthData, registrationRequest} from "../actions/auth";
 import {startRequestLoading} from "../actions/request";
 import {EMAIL_INSTRUCTIONS, FULL_NAME_INSTRUCTIONS, PASSWORD_INSTRUCTIONS} from "../constants/languages";
+import {changeModalData} from "../actions/modal";
 
 const RegistrationScreen = () => {
 	const dispatch = useDispatch();
 	const navigation = useNavigation();
-	const isRequestLoading = useSelector(state => state.request.isRequestLoading);
-	const { email, password, firstName, lastName } = useSelector(state => state.auth);
-	const languageWords = useSelector(state => state.language.languageWords);
-	const error = useSelector(state => state.auth.error);
+	const isRequestLoading = useSelector(state => state.requestReducer.isRequestLoading);
+	const { email, password, firstName, lastName } = useSelector(state => state.authReducer);
+	const languageWords = useSelector(state => state.languageReducer.languageWords);
+	const error = useSelector(state => state.authReducer.error);
 
 	const changeAuthData = (value, type) => {
 		dispatch({ type: CHANGE_AUTH_DATA, payload: { [type]: value }});
@@ -25,11 +26,31 @@ const RegistrationScreen = () => {
 	const sendRegistrationData = async () => {
 		if(!isRequestLoading) {
 			dispatch(startRequestLoading(true));
-			await dispatch(registrationRequest());
+			let networkError;
+			try {
+				await dispatch(registrationRequest());
+			} catch (e) {
+				dispatch(changeModalData({
+					hideTimer: 3,
+					isOpenedModal: true,
+					modalTitle: 'Error connection',
+					modalText: 'Server is not responding',
+				}));
+				networkError = true;
+			}
 			dispatch(startRequestLoading(false));
+			if(networkError) return;
 			navigation.replace('Authorization');
 		}
 	}
+
+	useFocusEffect(
+		React.useCallback(() => {
+			return () => {
+				dispatch(clearAuthData());
+			}
+		}, [])
+	);
 
 	const inputsValues = [
 		{id: 0, type: 'firstName', text: firstName, errorType: FULL_NAME_INSTRUCTIONS},
@@ -58,7 +79,7 @@ const RegistrationScreen = () => {
 		<View style={styles.container}>
 			<CustomFontText propsStyles={{color: 'black', marginBottom: 20}} text={languageWords.registration} />
 			{inputsComponent}
-			<CustomButton disable={disabledButton} onPress={sendRegistrationData} text={languageWords.authorize} />
+			<CustomButton disable={disabledButton} onPress={sendRegistrationData} text={languageWords.signUp} />
 		</View>
 	);
 };

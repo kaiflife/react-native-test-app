@@ -12,9 +12,9 @@ const CustomInput = ({
   onChange = () => {},
   disable = false
 }) => {
-  const currentTheme = useSelector(state => state.theme.currentTheme);
-  const error = useSelector(state => state.auth.error);
-  const languageWords = useSelector(state => state.language.languageWords);
+  const currentTheme = useSelector(state => state.themeReducer.currentTheme);
+  const error = useSelector(state => state.authReducer.error);
+  const languageWords = useSelector(state => state.languageReducer.languageWords);
   const disablePropsStyles = propsStyles.container && propsStyles.container.disable;
   const disableStyles = disable && (disablePropsStyles || styles.disableContainer);
   const pressFunc = disable ? () => {} : onChange;
