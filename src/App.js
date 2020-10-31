@@ -5,20 +5,21 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from "@react-navigation/stack";
 import {changeTheme} from "./helpers/addNewTheme";
 import {useDispatch, useSelector} from "react-redux";
-import {AnimatedLoaderSvg} from "./components/Svgs";
+import {LoaderSvg} from "./components/Svgs";
 import AuthScreen from "./screens/AuthScreen";
 import {CHANGE_CURRENT_THEME} from "./actions/theme/action";
 import {changeLanguage} from "./helpers/changeLanguage";
 import {CHANGE_CURRENT_LANGUAGE} from "./actions/language/action";
 import languages from "./constants/languages";
 import RegistrationScreen from "./screens/RegistrationScreen";
+import Loader from "./components/Loader";
 
-const hideNavbar = {hideNavbar: true};
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   const dispatch = useDispatch();
   const [isLoadingTheme, setIsLoadingTheme] = useState(true);
+  const isRequestLoading = useSelector(state => state.request.isRequestLoading);
   const token = useSelector(state => state.auth.token);
 
   const preloadSettings = async () => {
@@ -72,7 +73,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {isLoadingTheme ? <AnimatedLoaderSvg /> : navigation}
+      {isRequestLoading && <Loader />}
+      {isLoadingTheme ? <LoaderSvg /> : navigation}
     </View>
   );
 }

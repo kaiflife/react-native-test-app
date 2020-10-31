@@ -3,9 +3,9 @@ import {LANGUAGE_STORAGE_KEY} from "../constants/languages";
 
 export const changeLanguage = async (newLanguage = null) => {
   const storeData = await getStoreData(LANGUAGE_STORAGE_KEY);
-  let language = 'eng';
+  let language;
   if(!!storeData) {
-    language = storeData.language;
+    language = storeData;
   }
 
   if(!!newLanguage) {

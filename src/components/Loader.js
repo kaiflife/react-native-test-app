@@ -46,21 +46,16 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(100,100,100, 0.2)',
     zIndex: 10,
   },
   imageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
-  },
-  text: {
-    color: 'white',
-    position: 'absolute',
-    top: '10%',
-    fontSize: 23,
-    lineHeight: 27,
-    fontWeight: 'bold',
   },
 });
 

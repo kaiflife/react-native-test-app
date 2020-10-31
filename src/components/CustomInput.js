@@ -1,20 +1,34 @@
 import React from 'react';
-import {View, TextInput, StyleSheet} from "react-native";
+import {TextInput, StyleSheet} from "react-native";
 import {useSelector} from "react-redux";
 
-const CustomInput = ({ propsStyles = {}, text = '', onPress, disable = false}) => {
+const CustomInput = ({ propsStyles = {}, placeholder = '', secureTextEntry, text = '', onChange = () => {}, disable = false}) => {
   const currentTheme = useSelector(state => state.theme.currentTheme);
+  const languageWords = useSelector(state => state.language.languageWords);
   const disablePropsStyles = propsStyles.container && propsStyles.container.disable;
   const disableStyles = disable && (disablePropsStyles || styles.disableContainer);
-  const UsingComponent = disable || !onPress ? View : TextInput;
+  const pressFunc = disable ? () => {} : onChange;
   return (
-    <View style={[currentTheme.defaultInputContainer, propsStyles.container, disableStyles]}>
-        <UsingComponent text={text} onPress={onPress} style={[currentTheme.defaultInput, propsStyles.input]} />
-    </View>
+    <TextInput
+      autoCompleteType={secureTextEntry ? 'password' : disable ? 'off' : 'username'}
+      secureTextEntry={secureTextEntry}
+      value={text}
+      placeholder={languageWords[placeholder]}
+      placeholderTextColor={currentTheme.defaultInputPlaceholder}
+      onChangeText={pressFunc}
+      style={{...styles.input, ...currentTheme.defaultInput, ...propsStyles.input, ...disableStyles}}
+    />
   );
 }
 
 const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    marginBottom: 20,
+    width: '100%',
+    backgroundColor: 'red',
+    borderRadius: 4,
+  },
   disableContainer: {
     opacity: 0.3,
   }

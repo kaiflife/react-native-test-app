@@ -1,11 +1,12 @@
 import React from "react";
 import {registerRootComponent} from 'expo';
-import {createStore} from "redux";
+import {applyMiddleware, createStore} from "redux";
+import thunkMiddleware from 'redux-thunk';
 import {Provider} from "react-redux";
 import rootReducer from './src/reducers/index';
 import App from './src/App';
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
 const AppStorage = () => {
 	return (

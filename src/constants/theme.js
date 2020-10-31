@@ -8,10 +8,9 @@ const theme = {
     defaultText: {
       color: 'black',
     },
+    defaultInputPlaceholder: 'white',
     defaultInput: {
       color: 'white',
-    },
-    defaultInputContainer: {
       backgroundColor: 'black',
       borderColor: 'orange',
       borderWidth: 2,
@@ -20,22 +19,28 @@ const theme = {
   },
   light: {
     defaultButton: {
-      borderColor: 'orange',
+      borderColor: 'black',
       borderWidth: 2,
-      backgroundColor: 'black',
+      backgroundColor: 'orange',
+    },
+    appError: {
+      textAlign: 'center',
+      width: '100%',
+      position: 'relative',
+      color: 'red',
+      fontSize: 20,
     },
     defaultText: {
       color: 'white',
     },
     defaultInput: {
-      color: 'white',
-    },
-    defaultInputContainer: {
-      backgroundColor: 'black',
-      borderColor: 'orange',
+      color: 'black',
+      backgroundColor: 'lightblue',
+      borderColor: 'black',
       borderWidth: 2,
       padding: 10,
     },
+    defaultInputPlaceholder: 'gray',
   }
 }
 

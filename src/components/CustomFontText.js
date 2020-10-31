@@ -4,22 +4,23 @@ import {Text, StyleSheet} from "react-native";
 
 const CustomFontText = ({text = '', propsStyles = {}, fontFamily = ''}) => {
 	const currentTheme = useSelector(state => state.theme.currentTheme);
-	const finalStyles = [
-		fontTextStyles.lowFont,
-		currentTheme.defaultText,
-		propsStyles,
-		{fontFamily: fontFamily}
-	];
+	const finalStyles = {
+		...fontTextStyles.lowFont,
+		...currentTheme.defaultText,
+		...propsStyles,
+		fontFamily: fontFamily
+	};
 
 	return (
-		<Text styles={finalStyles}>{text}</Text>
+		<Text style={finalStyles}>{text}</Text>
 	);
 }
 
 const fontTextStyles = StyleSheet.create({
 	lowFont: {
-		fontSize: 12,
-		fontWeight: '300',
+		fontWeight: '400',
+		position: 'relative',
+		zIndex: 2,
 	}
 });
 

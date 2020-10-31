@@ -7,17 +7,18 @@ import {
 
 const initialState = {
 	token: null,
-	fullName: '',
+	firstName: '',
+	lastName: '',
 	password: '',
 	email: '',
-	error: 'something went wrong',
+	error: '',
 };
 
 const themeReducer = (state = initialState, action) => {
 	const {payload} = action;
 	switch (action.type) {
 		case CHANGE_AUTH_DATA: {
-			return {...state, }
+			return {...state, ...payload}
 		}
 		case AUTH_SUCCESS: {
 			return  {

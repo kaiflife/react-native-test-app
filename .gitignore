@@ -5,6 +5,7 @@
 # Xcode
 #
 build/
+src/helpers/dev/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -24,7 +25,6 @@ project.xcworkspace
 
 # Android/IntelliJ
 #
-build/
 .idea
 .gradle
 local.properties

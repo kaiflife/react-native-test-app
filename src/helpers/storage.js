@@ -5,9 +5,9 @@ export const setStoreData = async (key, value) => {
     const typeValue = typeof value;
     let finalValue = value;
     if(typeValue !== 'string') {
-      finalValue = JSON.stringify(value)
+      finalValue = JSON.stringify(value);
     }
-    await AsyncStorage.setItem(key, finalValue)
+    await AsyncStorage.setItem(key, finalValue);
   } catch (e) {
     console.error('ERROR SET STORAGE', e, e.message);
   }
@@ -16,7 +16,8 @@ export const setStoreData = async (key, value) => {
 export const getStoreData = async (key) => {
   try {
     const value = await AsyncStorage.getItem(key);
-    return value !== null ? JSON.parse(value) : null;
+
+    return value !== null ? typeof value !== 'string' ? JSON.parse(value) : value : null;
   } catch(e) {
     console.error('ERROR GET STORAGE', e, e.message);
   }
