@@ -1,16 +1,14 @@
 import React from 'react';
 import {useSelector} from "react-redux";
-import {Text} from "react-native-web";
+import {Text, StyleSheet} from "react-native";
 
 const CustomFontText = ({text = '', propsStyles = {}, fontFamily = ''}) => {
-	const isFontsReady = useSelector(state => state.stylesReducer.areFontsReady);
-	const currentTheme = useSelector(state => state.stylesReducer.currentTheme);
-	const finalFont = isFontsReady ? fontFamily : '';
+	const currentTheme = useSelector(state => state.theme.currentTheme);
 	const finalStyles = [
 		fontTextStyles.lowFont,
 		currentTheme.defaultText,
 		propsStyles,
-		{fontFamily: finalFont}
+		{fontFamily: fontFamily}
 	];
 
 	return (
@@ -21,7 +19,7 @@ const CustomFontText = ({text = '', propsStyles = {}, fontFamily = ''}) => {
 const fontTextStyles = StyleSheet.create({
 	lowFont: {
 		fontSize: 12,
-		fontWeight: 300,
+		fontWeight: '300',
 	}
 });
 

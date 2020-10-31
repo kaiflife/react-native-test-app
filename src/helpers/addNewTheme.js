@@ -2,26 +2,28 @@ import {getStoreData, setStoreData} from "./storage";
 import {THEME_STORAGE_KEY} from "../constants/theme";
 import initialTheme from '../constants/theme';
 
-export const changeTheme = async ({ newTheme = null, currentThemeName }) => {
-  let { theme, storageThemeName } = await getStoreData(THEME_STORAGE_KEY);
+export const changeTheme = async ({ newTheme = null, themeName } = {}) => {
+  const storeData = await getStoreData(THEME_STORAGE_KEY);
+  let theme = initialTheme;
+  let storageThemeName;
 
-  if(!newTheme) {
-    let actualTheme = theme;
-
-    if(!actualTheme) {
-      actualTheme = initialTheme;
-      await setStoreData(THEME_STORAGE_KEY, { theme: actualTheme, storageThemeName: currentThemeName});
-    }
-
-    return actualTheme[currentThemeName];
+  if(!!storeData) {
+    theme = storeData.theme;
+    storageThemeName = storeData.storageThemeName;
   }
 
-  theme[currentThemeName] = {
-    ...theme[storageThemeName],
-    ...newTheme,
-  };
+  if(newTheme) {
 
-  await setStoreData(THEME_STORAGE_KEY, { theme, storageThemeName: currentThemeName});
+    const currentTheme = theme[themeName] || {};
+    theme[themeName] = {
+      ...currentTheme,
+      ...newTheme,
+    };
 
-  return theme[currentThemeName];
+    await setStoreData(THEME_STORAGE_KEY, { theme, storageThemeName: themeName });
+    return theme[themeName];
+  }
+
+  await setStoreData(THEME_STORAGE_KEY, { theme, storageThemeName: themeName || storageThemeName});
+  return {theme, themeName};
 }
