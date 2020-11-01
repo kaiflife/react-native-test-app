@@ -1,6 +1,6 @@
-import axios from 'axios';
 import {boardsUrl} from "../../constants/api";
 import {BOARDS_REQUEST_FAILED, CHANGE_BOARDS_DATA} from "./action";
+import {anyAxios} from "../../helpers/useAxios";
 
 const changeBoardsData = (payload) => {
   return {
@@ -11,9 +11,12 @@ const changeBoardsData = (payload) => {
 
 export const getBoardsRequest = () => (dispatch) => {
   try {
-    return axios.get(boardsUrl)
+    return dispatch(anyAxios({method: 'get', url: boardsUrl}))
       .then(res => dispatch(changeBoardsData(res.data)))
-      .catch(e => dispatch({type: BOARDS_REQUEST_FAILED, payload: {error: e.response.data.message}}));
+      .catch(e => {
+        console.log(e.response);
+        return dispatch({type: BOARDS_REQUEST_FAILED, payload: {error: e.response.data.message}})
+      });
   } catch (e) {
     console.error('error axios', e.message);
   }
@@ -21,7 +24,7 @@ export const getBoardsRequest = () => (dispatch) => {
 
 export const createBoardRequest = (payload) => (dispatch) => {
   try {
-    return axios.post(boardsUrl, payload)
+    return dispatch(anyAxios({type: 'post', url: boardsUrl, body: payload}))
       .catch(e => dispatch({type: BOARDS_REQUEST_FAILED, payload: {error: e.response.data.message}}))
   } catch (e) {
     console.error('error axios', e.message);
@@ -30,7 +33,7 @@ export const createBoardRequest = (payload) => (dispatch) => {
 
 export const deleteBoardRequest = (payload) => (dispatch) => {
   try {
-    return axios.delete(boardsUrl, payload)
+    return dispatch(anyAxios({type: 'delete', url: boardsUrl, body: payload}))
       .catch(e => dispatch({type: BOARDS_REQUEST_FAILED, payload: {error: e.response.data.message}}))
   } catch (e) {
     console.error('error axios', e.message);
@@ -39,7 +42,7 @@ export const deleteBoardRequest = (payload) => (dispatch) => {
 
 export const updateBoardRequest = (payload) => (dispatch) => {
   try {
-    return axios.put(boardsUrl, payload)
+    return dispatch(anyAxios({type: 'put', url: boardsUrl, body: payload}))
       .catch(e => dispatch({type: BOARDS_REQUEST_FAILED, payload: {error: e.response.data.message}}))
   } catch (e) {
     console.error('error axios', e.message);

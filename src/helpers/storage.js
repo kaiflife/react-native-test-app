@@ -22,3 +22,11 @@ export const _getStoreData = async (key) => {
     console.error('ERROR GET STORAGE', e, e.message);
   }
 }
+
+export const _clearStoreData = async () => {
+  try {
+    AsyncStorage.clear();
+  } catch(e) {
+    console.error('ERROR GET STORAGE', e, e.message);
+  }
+}

@@ -1,44 +1,51 @@
-import React, { useEffect, useState } from "react";
-import {View, StyleSheet} from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import {View, StyleSheet, ScrollView} from "react-native";
 import CustomFontText from "../components/CustomFontText";
 import CustomInput from "../components/CustomInput";
 import {useDispatch, useSelector} from "react-redux";
 import {EMAIL_INSTRUCTIONS, FULL_NAME_INSTRUCTIONS, PASSWORD_INSTRUCTIONS} from "../constants/languages";
-import {CHANGE_AUTH_DATA} from "../actions/auth/action";
-import {startRequestLoading} from "../actions/request";
 import CustomButton from "../components/CustomButton";
-import { useFocusEffect } from '@react-navigation/native';
+import {clearAuthData, getUserDataRequest, updateUserDataRequest} from "../actions/auth";
 
 const SettingsScreen = () => {
 	const dispatch = useDispatch();
+	const languageWords = useSelector(state => state.languageReducer.languageWords);
 	const { error, email, password, firstName, lastName, token } = useSelector(state => state.authReducer);
-	const [newUserData, setNewUserData] = useState({firstName, lastName, password, email});
+	const [newUserData, setNewUserData] = useState({
+		email: '', password: '', firstName: '', lastName: ''
+	});
 
 	const changeAuthData = (value, type) => {
-		dispatch({ type: CHANGE_AUTH_DATA, payload: { [type]: value }});
+		setNewUserData({
+			...newUserData,
+			[type]: value,
+		})
 	}
 
-	const onGetUserSettings = async () => {
-		dispatch(startRequestLoading(true));
-		await dispatch(getUserSettingsRequest());
-		dispatch(startRequestLoading(false));
-	}
+	const initialRequests = async () => {
+		console.log('getUserData')
+		await dispatch(getUserDataRequest());
+	};
+
+	const onSaveData = async () => {
+		await dispatch(updateUserDataRequest(newUserData));
+	};
+
+	const onLogout = useCallback(() => {
+		dispatch(clearAuthData());
+	}, [token]);
 
 	useEffect(() => {
 		if(token) {
-			onGetUserSettings();
+			initialRequests();
 		}
 	}, [token]);
 
-	useFocusEffect(() => {
-		return () => setNewUserData({});
-	})
-
 	const inputsValues = [
-		{id: 0, type: 'firstName', text: firstName, errorType: FULL_NAME_INSTRUCTIONS},
-		{id: 1, type: 'lastName', text: lastName, errorType: FULL_NAME_INSTRUCTIONS},
-		{id: 2, type: 'email', text: email, errorType: EMAIL_INSTRUCTIONS},
-		{id: 3, type: 'password', text: password, errorType: PASSWORD_INSTRUCTIONS},
+		{id: 0, type: 'firstName', text: newUserData.firstName || firstName, errorType: FULL_NAME_INSTRUCTIONS},
+		{id: 1, type: 'lastName', text: newUserData.lastName || lastName, errorType: FULL_NAME_INSTRUCTIONS},
+		{id: 2, type: 'email', text: newUserData.email || email, errorType: EMAIL_INSTRUCTIONS},
+		{id: 3, type: 'password', text: newUserData.password || password, errorType: PASSWORD_INSTRUCTIONS},
 	];
 
 	const inputsComponent = inputsValues.map(item => {
@@ -55,13 +62,18 @@ const SettingsScreen = () => {
 		)
 	});
 
-
+	const disabledButton = !newUserData.lastName || !newUserData.firstName || !newUserData.password || !newUserData.email;
 
 	return (
 		<View style={styles.container}>
 			<CustomFontText text='My settings' />
-			{inputsComponent}
-			<CustomButton disable={disabledButton} onPress={sendRegistrationData} text={languageWords.authorize} />
+			<ScrollView>
+				<View>
+					{inputsComponent}
+					<CustomButton disable={disabledButton} onPress={onSaveData} text={languageWords.authorize} />
+				</View>
+				<CustomButton text={languageWords.logout} onPress={onLogout} />
+			</ScrollView>
 		</View>
 	);
 };

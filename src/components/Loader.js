@@ -1,6 +1,5 @@
 import React, {useRef} from 'react';
 import {View, StyleSheet, Animated, Easing} from 'react-native';
-import {LoaderSvg} from "./Svgs";
 
 const Loader = ({propsStyles = {}}) => {
 
@@ -33,7 +32,7 @@ const Loader = ({propsStyles = {}}) => {
             height: 70,
             transform: [{ rotate: RotateData }]
           }}
-          source={LoaderSvg}
+          source={null}
         />
       </View>
     </View>

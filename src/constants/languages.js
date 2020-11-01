@@ -37,6 +37,7 @@ const languages = {
     signUp: 'Регистрация',
     registration: 'Страница регистрации',
     noBoards: 'Досок нет',
+    logout: 'Выйти из аккаунта',
 
     [CONNECTION_ERROR]: 'Ошибка подключения',
     [SERVER_NOT_RESPOND]: 'Сервер не отвечает',
@@ -73,6 +74,7 @@ const languages = {
     registration: 'Registration page',
     passwordInstructions: 'Пароль должен быть не менее 8 символов',
     noBoards: 'You have no boards',
+    logout: 'Logout',
 
     [CONNECTION_ERROR]: 'Connection error',
     [SERVER_NOT_RESPOND]: 'Server is not responding',

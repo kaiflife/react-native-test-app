@@ -40,7 +40,7 @@ export default function App() {
   useEffect(() => {
     preloadSettings()
       .then(async () => {
-        const token = await _getStoreData('token');
+        const token = await _getStoreData('tokens');
         if(token) {
           dispatch(changeAuthData({token}));
         }

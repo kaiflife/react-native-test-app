@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
+import {View, StyleSheet, ScrollView, TouchableOpacity, Image} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigation} from '@react-navigation/native';
 import CustomFontText from "../components/CustomFontText";
 import {startRequestLoading} from "../actions/request";
 import {createBoardRequest, getBoardsRequest} from "../actions/boards";
-import CustomButton from "../components/CustomButton";
 import {openErrorModal} from "../actions/modal";
 
 const BoardsScreen = () => {
@@ -19,19 +18,17 @@ const BoardsScreen = () => {
 	const token = useSelector(state => state.authReducer.token);
 
 	const onGetBoards = async () => {
-		dispatch(startRequestLoading(true));
+		console.log('getBoardsRequest');
 		try {
 			await dispatch(getBoardsRequest());
 		} catch (e) {
 			dispatch(openErrorModal());
 		}
-		dispatch(startRequestLoading(false));
 	}
 
 	useEffect(() => {
-			console.log('asd');
-			// onGetBoards();
-	}, []);
+		onGetBoards();
+	}, [token]);
 
 	const sendCreateRequest = async (payload) => {
 		if(!isRequestLoading) {
