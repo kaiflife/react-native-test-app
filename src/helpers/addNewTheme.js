@@ -1,9 +1,9 @@
-import {getStoreData, setStoreData} from "./storage";
+import {_getStoreData, _setStoreData} from "./storage";
 import {THEME_STORAGE_KEY} from "../constants/theme";
 import initialTheme from '../constants/theme';
 
 export const changeTheme = async ({ newTheme = null, themeName } = {}) => {
-  const storeData = await getStoreData(THEME_STORAGE_KEY);
+  const storeData = await _getStoreData(THEME_STORAGE_KEY);
   let theme = initialTheme;
   let storageThemeName = 'light';
 
@@ -22,10 +22,10 @@ export const changeTheme = async ({ newTheme = null, themeName } = {}) => {
       ...newTheme,
     };
 
-    await setStoreData(THEME_STORAGE_KEY, { theme, storageThemeName: storageThemeName });
+    await _setStoreData(THEME_STORAGE_KEY, { theme, storageThemeName: storageThemeName });
     return {theme: theme[storageThemeName], storageThemeName};
   }
 
-  await setStoreData(THEME_STORAGE_KEY, { theme, storageThemeName: storageThemeName});
+  await _setStoreData(THEME_STORAGE_KEY, { theme, storageThemeName: storageThemeName});
   return {theme: theme[storageThemeName], themeName: storageThemeName};
 }

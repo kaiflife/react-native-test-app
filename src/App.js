@@ -11,9 +11,12 @@ import {changeLanguage} from "./helpers/changeLanguage";
 import {CHANGE_CURRENT_LANGUAGE} from "./actions/language/action";
 import languages from "./constants/languages";
 import RegistrationScreen from "./screens/RegistrationScreen";
-import Loader from "./components/Loader";
+import { generalStyles } from "./constants/theme";
 import Modal from "./components/Modal";
 import SettingsScreen from "./screens/SettingsScreen";
+import BoardsScreen from "./screens/BoardsScreen";
+import {_getStoreData} from "./helpers/storage";
+import {changeAuthData} from "./actions/auth";
 
 const Tab = createBottomTabNavigator();
 
@@ -36,7 +39,13 @@ export default function App() {
 
   useEffect(() => {
     preloadSettings()
-      .then(() => setIsLoadingTheme(false))
+      .then(async () => {
+        const token = await _getStoreData('token');
+        if(token) {
+          dispatch(changeAuthData({token}));
+        }
+        setIsLoadingTheme(false)
+      })
       .catch(e => console.error('ERROR PRELOADING', e));
   }, []);
 
@@ -54,7 +63,7 @@ export default function App() {
       <Tab.Navigator>
         <Tab.Screen name='Boards' component={BoardsScreen} />
         <Tab.Screen name='Settings' component={SettingsScreen} />
-        {boardId && <Tab.Screen name='Board' component={BoardScreen} />}
+        {/*{boardId && <Tab.Screen name='Board' component={BoardScreen} />}*/}
       </Tab.Navigator>
     );
   }
@@ -67,8 +76,10 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {isOpenedModal && <Modal />}
-      {isRequestLoading && <Loader />}
+      <Modal />
+      <View style={isRequestLoading ? generalStyles.loading : generalStyles.loading}>
+        <LoaderSvg />
+      </View>
       {isLoadingTheme ? <LoaderSvg /> : navigation}
     </View>
   );

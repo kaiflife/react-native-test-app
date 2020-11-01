@@ -1,4 +1,5 @@
-import {CHANGE_MODAL_DATA} from "../actions/modal/action";
+import {CHANGE_MODAL_DATA, OPEN_ERROR_MODAL} from "../actions/modal/action";
+import {CONNECTION_ERROR, SERVER_NOT_RESPOND} from "../constants/languages";
 
 const initialState = {
 	isOpenedModal: false,
@@ -16,6 +17,16 @@ const modalReducer = (state = initialState, action) => {
 				...state,
 				...payload
 			};
+		}
+		case OPEN_ERROR_MODAL: {
+			return {
+				...state,
+				hideTimer: 3,
+				isOpenedModal: true,
+				modalTitle: CONNECTION_ERROR,
+				modalText: SERVER_NOT_RESPOND,
+				...payload,
+			}
 		}
 		default:
 			return state

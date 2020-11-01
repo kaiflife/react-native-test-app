@@ -17,6 +17,8 @@ export const EMAIL_INSTRUCTIONS = `email ${instructions}`;
 export const DELETED_BOARD_FROM_LIST = 'board was deleted from your list';
 export const DELETED_BOARD = 'board was deleted';
 export const EMPTY_DATA = 'empty data';
+export const CONNECTION_ERROR = 'Connection error';
+export const SERVER_NOT_RESPOND = 'Server is not responding';
 
 const languages = {
   ru: {
@@ -34,7 +36,10 @@ const languages = {
     authorize: 'Страница авторизации',
     signUp: 'Регистрация',
     registration: 'Страница регистрации',
+    noBoards: 'Досок нет',
 
+    [CONNECTION_ERROR]: 'Ошибка подключения',
+    [SERVER_NOT_RESPOND]: 'Сервер не отвечает',
     [USER_NOT_FOUND]: 'Пользователь не найден',
     [BOARD_NOT_FOUND]: 'Доска не найдена',
     [SOMETHING_WENT_WRONG]: 'Что-то пошло не так',
@@ -67,13 +72,16 @@ const languages = {
     signIn: 'Sign in',
     registration: 'Registration page',
     passwordInstructions: 'Пароль должен быть не менее 8 символов',
+    noBoards: 'You have no boards',
 
+    [CONNECTION_ERROR]: 'Connection error',
+    [SERVER_NOT_RESPOND]: 'Server is not responding',
     [USER_NOT_FOUND]: 'User not found',
     [BOARD_NOT_FOUND]: 'Board not found',
     [SOMETHING_WENT_WRONG]: 'Something went wrong',
     [INVALID_PASSWORD]: 'Invalid password',
     [PASSWORD_INSTRUCTIONS]: 'Password must be more then 8 characters',
-    [FULL_NAME_INSTRUCTIONS]: 'Firstname of lastname is incorrect',
+    [FULL_NAME_INSTRUCTIONS]: 'Firstname or lastname is incorrect',
     [EMAIL_INSTRUCTIONS]: 'Email is incorrect',
     [INVALID_TOKEN]: 'Unauthorized',
     [EMAIL_EXISTS]: 'Email already exist',

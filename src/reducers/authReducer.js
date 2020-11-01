@@ -7,10 +7,10 @@ import {
 
 const initialState = {
 	token: null,
-	firstName: '',
-	lastName: '',
-	password: '',
-	email: '',
+	firstName: 'pavel',
+	lastName: 'petrunkin',
+	password: 'qwe123XD',
+	email: 'test@mail.ru',
 	error: '',
 };
 

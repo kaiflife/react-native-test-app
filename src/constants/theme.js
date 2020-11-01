@@ -17,8 +17,16 @@ const theme = {
       padding: 10,
     },
     modalContainer: {},
+    noBoards: {
+      color: 'white',
+      textAlign: 'center',
+    },
   },
   light: {
+    noBoards: {
+      color: 'black',
+      textAlign: 'center',
+    },
     defaultButton: {
       borderColor: 'black',
       borderWidth: 2,
@@ -26,7 +34,6 @@ const theme = {
     },
     appError: {
       width: '100%',
-      marginBottom: 5,
       color: 'red',
       fontSize: 16,
     },
@@ -45,6 +52,28 @@ const theme = {
   }
 }
 
-export const THEME_STORAGE_KEY = 'themeKey';
+const THEME_STORAGE_KEY = 'themeKey';
+
+const generalStyles = {
+  loading: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  hideFullScreenComponent: {
+    height: 0,
+    opacity: 0,
+    padding: 0,
+    margin: 0,
+  }
+};
+
+export {
+  generalStyles,
+  THEME_STORAGE_KEY,
+}
 
 export default theme;
