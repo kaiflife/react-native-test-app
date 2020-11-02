@@ -28,7 +28,6 @@ export default function App() {
   const preloadSettings = async () => {
     const languageName = await changeLanguage();
     const languageWords = languages[languageName];
-    console.log(languageWords);
     dispatch({ type: CHANGE_CURRENT_LANGUAGE, payload: {languageName, languageWords}});
 
     const {theme, themeName} = await changeTheme();

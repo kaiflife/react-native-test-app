@@ -1,9 +1,9 @@
 import axios from 'axios';
 import {refreshTokenUrl} from "../constants/api";
 import { _setStoreData, _clearStoreData } from "./storage";
-import {changeAuthData, logoutRequest} from "../actions/auth";
+import {changeAuthData} from "../actions/auth";
 const JWT_EXPIRED = 'jwt expired';
-const INVALID_TOKEN = 'jwt expired';
+const INVALID_TOKEN = 'invalid token';
 
 const makeHeaders = ({token, multipartConfig}) => {
   let headers = {};
@@ -63,15 +63,15 @@ const useAxios = async ({url, params, body, method, multipartConfig, token, refr
   } catch (error) {
     const updateToken = async () => {
       const tokenResponse = await makeRefreshToken({token, refreshToken});
-      if(tokenResponse.response && tokenResponse.response.data && tokenResponse.response.data.message === JWT_EXPIRED){
+      const errorResponse = tokenResponse.response;
+      if(errorResponse && !errorResponse.data){
         throw tokenResponse;
       }
-      if(tokenResponse.response && tokenResponse.response.data.message === INVALID_TOKEN){
-        if(token){
-          await dispatch(changeAuthData({
-            token: null, refreshToken: null
-          }));
-        }
+      const errorMessage = tokenResponse.response.data.message;
+      if(errorMessage === INVALID_TOKEN || errorMessage === JWT_EXPIRED) {
+        dispatch(changeAuthData({
+          token: null, refreshToken: null
+        }));
         await _clearStoreData();
         return;
       }
@@ -111,9 +111,8 @@ const useAxios = async ({url, params, body, method, multipartConfig, token, refr
 }
 
 export const anyAxios = (props) => (dispatch, getState) => {
-  const token = getState().authReducer.token;
-  const refreshToken = getState().authReducer.refreshToken;
-  return useAxios({...props, token, refreshToken });
+  const {token, refreshToken} = getState().authReducer;
+  return useAxios({...props, token, refreshToken, dispatch });
 }
 const axiosFunctions = {
   get: getAxios,

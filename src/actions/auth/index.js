@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {authUrl, boardsUrl, registrationUrl} from "../../constants/api";
+import {authUrl, boardsUrl, registrationUrl, usersRoute} from "../../constants/api";
 import {AUTH_REQUEST_FAILED, CHANGE_AUTH_DATA, CLEAR_AUTH_DATA} from "./action";
 import {openErrorModal} from "../modal";
 import {_setStoreData} from "../../helpers/storage";
@@ -18,6 +18,7 @@ export const authRequest = (payload) => (dispatch) => {
       .then(result => {
         dispatch(changeAuthData(result.data));
         _setStoreData('tokens', result.data.token);
+        return;
       })
       .catch(e => {
         dispatch({type: AUTH_REQUEST_FAILED, payload: {error: e.response.data.message}});
@@ -44,15 +45,16 @@ export const registrationRequest = (payload) => (dispatch) => {
   }
 }
 
-export const getUserDataRequest = () => (dispatch) => {
+export const getUserDataRequest = () => (dispatch, getState) => {
   try {
-    return dispatch(anyAxios({method: 'get', url: boardsUrl}))
+    return dispatch(anyAxios({method: 'get', url: usersRoute}))
       .then(res => {
+        console.log('getUserDataRequest', res);
         dispatch(changeAuthData(res.data));
         return res.status;
       })
       .catch(e => {
-        console.error(e);
+        console.error('getUserDataRequest', e, e.response.data);
         if(typeof e === 'object' && e.response) {
           dispatch({type: AUTH_REQUEST_FAILED, payload: {error: e.response.data.message}});
         }
