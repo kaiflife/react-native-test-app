@@ -6,15 +6,14 @@ import CustomButton from "../components/CustomButton";
 import {useNavigation} from '@react-navigation/native';
 import CustomFontText from "../components/CustomFontText";
 import {authRequest} from "../actions/auth";
-import {startRequestLoading} from "../actions/request";
 import {openErrorModal} from "../actions/modal";
 
 const AuthScreen = () => {
 	const dispatch = useDispatch();
 	const navigation = useNavigation();
 	const [loginData, setLoginData] = useState({email: 'test@mail.ru', password: 'qwerty123XD'});
+	const [isLoading, setIsLoading] = useState(false);
 	const languageWords = useSelector(state => state.languageReducer.languageWords);
-	const isRequestLoading = useSelector(state => state.requestReducer.isRequestLoading);
 	const token = useSelector(state => state.authReducer.token);
 
 	const changeAuthData = (value, type) => {
@@ -22,16 +21,14 @@ const AuthScreen = () => {
 	}
 
 	const sendAuthData = async () => {
-		if(!isRequestLoading) {
-			dispatch(startRequestLoading(true));
-			try {
-				const { email, password } = loginData
-				await dispatch(authRequest({email, password}));
-			} catch (e) {
-				dispatch(openErrorModal());
-			}
-			dispatch(startRequestLoading(false));
+		try {
+			const { email, password } = loginData
+			setIsLoading(true);
+			await dispatch(authRequest({email, password}));
+		} catch (e) {
+			dispatch(openErrorModal());
 		}
+		setIsLoading(false);
 	}
 
 	useEffect(() => {
@@ -58,7 +55,7 @@ const AuthScreen = () => {
 		)
 	});
 
-	const disabledButton = !loginData.email.length || !loginData.password.length;
+	const disabledButton = isLoading && (!loginData.email.length || !loginData.password.length);
 
 	return (
 		<View style={styles.container}>

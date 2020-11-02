@@ -1,7 +1,9 @@
 import axios from 'axios';
 import {refreshTokenUrl} from "../constants/api";
 import { _setStoreData, _clearStoreData } from "./storage";
-import {changeAuthData} from "../actions/auth";
+import {changeAuthData, logoutRequest} from "../actions/auth";
+const JWT_EXPIRED = 'jwt expired';
+const INVALID_TOKEN = 'jwt expired';
 
 const makeHeaders = ({token, multipartConfig}) => {
   let headers = {};
@@ -44,7 +46,7 @@ export const deleteAxios = ({url, params, token}) => {
   return axios.delete(url, authParams)
 };
 
-const refreshToken = ({token, refreshToken}) => {
+const makeRefreshToken = ({token, refreshToken}) => {
   const body = {refreshToken};
   const url = refreshTokenUrl;
   return postAxios({url, body, token}).then(response => response.data, reject => reject);
@@ -52,21 +54,23 @@ const refreshToken = ({token, refreshToken}) => {
 
 let tokenRefreshPromise = null;
 
-const useAxios = async ({dispatch, url, params, body, method, multipartConfig, tokens}) => {
+const useAxios = async ({url, params, body, method, multipartConfig, token, refreshToken, dispatch}) => {
   try {
     if (tokenRefreshPromise) {
       await tokenRefreshPromise;
     }
-    return await axiosFunctions[method]({url, params, body, token: tokens.token, multipartConfig});
-  } catch (e) {
+    return await axiosFunctions[method]({url, params, body, token, multipartConfig});
+  } catch (error) {
     const updateToken = async () => {
-      const tokenResponse = await refreshToken({token: tokens.token, refreshToken: tokens.refreshToken});
-      if(tokenResponse.response && tokenResponse.response.data && typeof tokenResponse.response.data === 'string'){
+      const tokenResponse = await makeRefreshToken({token, refreshToken});
+      if(tokenResponse.response && tokenResponse.response.data && tokenResponse.response.data.message === JWT_EXPIRED){
         throw tokenResponse;
       }
-      if(tokenResponse.response && tokenResponse.response.data.error.refreshToken === 'Refresh token is invalid or you are not logged in'){
-        if(tokens.token){
-          dispatch('logoutRequest');
+      if(tokenResponse.response && tokenResponse.response.data.message === INVALID_TOKEN){
+        if(token){
+          await dispatch(changeAuthData({
+            token: null, refreshToken: null
+          }));
         }
         await _clearStoreData();
         return;
@@ -80,11 +84,21 @@ const useAxios = async ({dispatch, url, params, body, method, multipartConfig, t
       }));
       return tokenResponse.token;
     }
-    if(e.response && e.response.data) {
-      const errorData = e.response.data;
-      const isJWTExpired = errorData.message === 'jwt expired';
+    if(error && error.response && error.response.data) {
+      const errorMessage = error.response.data.message;
+      const isJWTInvalid = errorMessage === INVALID_TOKEN;
+
+      if(isJWTInvalid) {
+        await dispatch(changeAuthData({
+          token: null, refreshToken: null
+        }));
+        await _clearStoreData();
+        return;
+      }
+
+      const isJWTExpired = errorMessage === JWT_EXPIRED;
       if(!isJWTExpired){
-        throw e;
+        throw error;
       }
     }
     if(!tokenRefreshPromise){
@@ -96,9 +110,10 @@ const useAxios = async ({dispatch, url, params, body, method, multipartConfig, t
   }
 }
 
-export const anyAxios = async ({url, params, body, method, multipartConfig}) => (dispatch, getState) => {
-  const tokens = getState().authReducer.token;
-  return useAxios({dispatch, url, params, body, method, multipartConfig, tokens});
+export const anyAxios = (props) => (dispatch, getState) => {
+  const token = getState().authReducer.token;
+  const refreshToken = getState().authReducer.refreshToken;
+  return useAxios({...props, token, refreshToken });
 }
 const axiosFunctions = {
   get: getAxios,

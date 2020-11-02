@@ -14,7 +14,6 @@ export const getBoardsRequest = () => (dispatch) => {
     return dispatch(anyAxios({method: 'get', url: boardsUrl}))
       .then(res => dispatch(changeBoardsData(res.data)))
       .catch(e => {
-        console.log(e.response);
         return dispatch({type: BOARDS_REQUEST_FAILED, payload: {error: e.response.data.message}})
       });
   } catch (e) {

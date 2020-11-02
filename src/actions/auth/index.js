@@ -1,9 +1,9 @@
 import axios from 'axios';
-import {authUrl, boardsUrl, registrationUrl, usersRoute} from "../../constants/api";
+import {authUrl, boardsUrl, registrationUrl} from "../../constants/api";
 import {AUTH_REQUEST_FAILED, CHANGE_AUTH_DATA, CLEAR_AUTH_DATA} from "./action";
 import {openErrorModal} from "../modal";
 import {_setStoreData} from "../../helpers/storage";
-import useAxios, {anyAxios} from "../../helpers/useAxios";
+import {anyAxios} from "../../helpers/useAxios";
 
 export const changeAuthData = payload => {
   return {
@@ -52,7 +52,7 @@ export const getUserDataRequest = () => (dispatch) => {
         return res.status;
       })
       .catch(e => {
-        console.log(e);
+        console.error(e);
         if(typeof e === 'object' && e.response) {
           dispatch({type: AUTH_REQUEST_FAILED, payload: {error: e.response.data.message}});
         }

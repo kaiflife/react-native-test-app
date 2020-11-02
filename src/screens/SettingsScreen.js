@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {EMAIL_INSTRUCTIONS, FULL_NAME_INSTRUCTIONS, PASSWORD_INSTRUCTIONS} from "../constants/languages";
 import CustomButton from "../components/CustomButton";
 import {clearAuthData, getUserDataRequest, updateUserDataRequest} from "../actions/auth";
+import {useFocusEffect} from "@react-navigation/native";
 
 const SettingsScreen = () => {
 	const dispatch = useDispatch();
@@ -27,18 +28,18 @@ const SettingsScreen = () => {
 		await dispatch(getUserDataRequest());
 	};
 
+	const onFocusBoards = useCallback(() => {
+		initialRequests();
+	}, [token])
+
+	useFocusEffect(onFocusBoards);
+
 	const onSaveData = async () => {
 		await dispatch(updateUserDataRequest(newUserData));
 	};
 
 	const onLogout = useCallback(() => {
 		dispatch(clearAuthData());
-	}, [token]);
-
-	useEffect(() => {
-		if(token) {
-			initialRequests();
-		}
 	}, [token]);
 
 	const inputsValues = [

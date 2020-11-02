@@ -2,7 +2,7 @@ import {CHANGE_CURRENT_LANGUAGE} from "../actions/language/action";
 
 const initialState = {
 	languageName: '',
-	languageWords: null,
+	languageWords: {},
 };
 
 const languageReducer = (state = initialState, action) => {

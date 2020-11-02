@@ -8,7 +8,7 @@ const tasksUrl = `${apiUrl}/tasks`;
 const columnsUrl = `${apiUrl}/columns`;
 const boardsUrl = `${apiUrl}/boards`;
 
-const refreshTokenUrl = `${apiUrl}/refreshToken`;
+const refreshTokenUrl = `${usersRoute}/refreshToken`;
 
 export {
   authUrl,

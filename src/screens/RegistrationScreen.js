@@ -6,7 +6,6 @@ import CustomButton from "../components/CustomButton";
 import {useNavigation} from '@react-navigation/native';
 import CustomFontText from "../components/CustomFontText";
 import {registrationRequest} from "../actions/auth";
-import {startRequestLoading} from "../actions/request";
 import {
 	EMAIL_INSTRUCTIONS,
 	FULL_NAME_INSTRUCTIONS,
@@ -17,7 +16,7 @@ import {openErrorModal} from "../actions/modal";
 const RegistrationScreen = () => {
 	const dispatch = useDispatch();
 	const navigation = useNavigation();
-	const isRequestLoading = useSelector(state => state.requestReducer.isRequestLoading);
+	const [isLoading, setIsLoading] = useState(false);
 	const [registerData, setRegisterData] = useState({
 		email: 'test@mail.ru', password: 'qwerty123XD', firstName: 'pavel', lastName: 'petrunkin'
 	});
@@ -29,21 +28,19 @@ const RegistrationScreen = () => {
 	}
 
 	const sendRegistrationData = async () => {
-		if(!isRequestLoading) {
-			dispatch(startRequestLoading(true));
-			let result;
-			try {
-				const fullName = `${registerData.firstName} ${registerData.lastName}`;
-				const { email, password } = registerData;
-				result = await dispatch(registrationRequest({email, password, fullName}));
-			} catch (e) {
-				dispatch(openErrorModal());
-				result = null;
-			}
-			dispatch(startRequestLoading(false));
-			if(!result) return;
-			navigation.goBack();
+		let result;
+		const fullName = `${registerData.firstName} ${registerData.lastName}`;
+		const { email, password } = registerData;
+		try {
+			setIsLoading(true);
+			result = await dispatch(registrationRequest({email, password, fullName}));
+		} catch (e) {
+			dispatch(openErrorModal());
+			result = null;
 		}
+		setIsLoading(false);
+		if(!result) return;
+		navigation.goBack();
 	}
 
 	const inputsValues = [
@@ -67,8 +64,8 @@ const RegistrationScreen = () => {
 		)
 	});
 
-	const disabledButton = !registerData.firstName.length || !registerData.lastName.length
-		|| !registerData.email.length || !registerData.password.length;
+	const disabledButton = isLoading && (!registerData.firstName.length || !registerData.lastName.length
+		|| !registerData.email.length || !registerData.password.length);
 
 	return (
 		<View style={styles.container}>
