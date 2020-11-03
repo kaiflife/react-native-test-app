@@ -8,6 +8,9 @@ const theme = {
     defaultText: {
       color: 'black',
     },
+    boardsContainer: {
+      backgroundColor: 'white',
+    },
     defaultInputPlaceholder: 'white',
     defaultInput: {
       color: 'white',
@@ -39,6 +42,9 @@ const theme = {
     },
     defaultText: {
       color: 'white',
+    },
+    boardsContainer: {
+      backgroundColor: 'dark',
     },
     defaultInput: {
       color: 'black',

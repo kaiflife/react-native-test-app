@@ -59,7 +59,7 @@ const RegistrationScreen = () => {
 				isError={error === item.errorType}
 				text={item.text}
 				placeholder={item.type}
-				onChange={(value) => onChangeAuthData(value, item.type)}
+				onChangeText={(value) => onChangeAuthData(value, item.type)}
 			/>
 		)
 	});

@@ -4,7 +4,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import CustomFontText from "../components/CustomFontText";
 import {createBoardRequest, getBoardsRequest} from "../actions/boards";
-import {openErrorModal} from "../actions/modal";
+import {changeModalData, closeModal, openErrorModal} from "../actions/modal";
+import CustomButton from "../components/CustomButton";
 
 const BoardsScreen = () => {
 	const dispatch = useDispatch();
@@ -30,10 +31,42 @@ const BoardsScreen = () => {
 
 	useFocusEffect(onFocusBoards);
 
-	const sendCreateRequest = async (payload) => {
+	const sendCreateRequest = async () => {
 		setIsLoading(true);
-		await dispatch(createBoardRequest(payload));
+		await dispatch(createBoardRequest());
+		dispatch(closeModal());
 		setIsLoading(false);
+	}
+
+	const onCloseModal = () => {
+		dispatch(closeModal());
+	}
+
+	const openModal = () => {
+		dispatch(changeModalData({
+			isOpenedModal: true,
+			modalTitle: 'createBoard',
+			modalContainerStyles: {backgroundColor: 'white', padding: 40},
+			modalInputsInfo: [
+				{
+					id: 0,
+					isError: 'titleInstructions',
+					placeholder: 'title',
+					onChangeText: ({value, index}) => {
+						dispatch(changeModalData({newInputInfo: {value, index}}))
+					},
+					value: '',
+				},
+			],
+			modalButtonApply: {
+				text: 'create',
+				onPress: async (title) => sendCreateRequest(title)
+			},
+			modalButtonCancel: {
+				text: 'cancel',
+				onPress: () => onCloseModal()
+			},
+		}));
 	}
 
 	const boardsComponents = boards.map(item => {
@@ -51,14 +84,18 @@ const BoardsScreen = () => {
 					</View>
 				</TouchableOpacity>
 			</View>
-		)
+		);
 	});
 
+
 	return (
-		<ScrollView style={styles.container}>
-			<CustomFontText propsStyles={{color: 'black', marginBottom: 20}} text={languageWords.boards} />
-			{(!!boardsComponents.length && boardsComponents) || <CustomFontText propsStyles={currentTheme.noBoards} text={languageWords.noBoards} />}
-		</ScrollView>
+		<View>
+			<ScrollView horizontal style={{...styles.container, ...currentTheme.boardsContainer}}>
+				{(!!boardsComponents.length && boardsComponents) || <CustomFontText propsStyles={currentTheme.noBoards} text={languageWords.noBoards} />}
+			</ScrollView>
+			<CustomButton text={languageWords.createBoard} onPress={openModal} />
+		</View>
+
 	);
 };
 

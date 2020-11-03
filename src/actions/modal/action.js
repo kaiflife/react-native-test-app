@@ -1,2 +1,3 @@
 export const CHANGE_MODAL_DATA = 'CHANGE_MODAL_DATA';
 export const OPEN_ERROR_MODAL = 'OPEN_ERROR_MODAL';
+export const CLOSE_MODAL = 'CLOSE_MODAL';

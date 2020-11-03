@@ -24,7 +24,6 @@ const SettingsScreen = () => {
 	}
 
 	const initialRequests = async () => {
-		console.log('getUserData')
 		await dispatch(getUserDataRequest());
 	};
 
@@ -58,7 +57,7 @@ const SettingsScreen = () => {
 				isError={error === item.errorType}
 				text={item.text}
 				placeholder={item.type}
-				onChange={(value) => changeAuthData(value, item.type)}
+				onChangeText={(value) => changeAuthData(value, item.type)}
 			/>
 		)
 	});

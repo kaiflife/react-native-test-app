@@ -50,7 +50,7 @@ const AuthScreen = () => {
 				key={item.id}
 				text={item.text}
 				placeholder={item.type}
-				onChange={(value) => changeAuthData(value, item.type)}
+				onChangeText={(value) => changeAuthData(value, item.type)}
 			/>
 		)
 	});

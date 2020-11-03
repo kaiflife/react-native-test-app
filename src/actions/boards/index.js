@@ -22,8 +22,9 @@ export const getBoardsRequest = () => (dispatch) => {
 }
 
 export const createBoardRequest = (payload) => (dispatch) => {
+  const title = payload;
   try {
-    return dispatch(anyAxios({type: 'post', url: boardsUrl, body: payload}))
+    return dispatch(anyAxios({type: 'post', url: boardsUrl, body: { title }}))
       .catch(e => dispatch({type: BOARDS_REQUEST_FAILED, payload: {error: e.response.data.message}}))
   } catch (e) {
     console.error('error axios', e.message);

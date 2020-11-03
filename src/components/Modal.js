@@ -11,7 +11,7 @@ import {generalStyles} from "../constants/theme";
 const Modal = ({ onPress = () => {} }) => {
   const dispatch = useDispatch();
   const languageWords = useSelector(state => state.languageReducer.languageWords);
-  const { isOpenedModal, modalInputText, modalTitle, modalButtonTitle, modalText, hideTimer } = useSelector(state => state.modalReducer);
+  const { modalInputsInfo, isOpenedModal, modalInputText, modalTitle, modalButtonTitle, modalText, hideTimer } = useSelector(state => state.modalReducer);
   const currentTheme = useSelector(state => state.themeReducer.currentTheme);
   const error = useSelector(state => state.boardsReducer.error);
 
@@ -28,7 +28,17 @@ const Modal = ({ onPress = () => {} }) => {
     }
   }, [hideTimer]);
 
-  const changeBoardTitle = (newTitle) => dispatch(changeModalData({modalText: newTitle}));
+  const inputsMap = modalInputsInfo.map((input, index) => {
+    return (
+      <CustomInput
+        key={input.id}
+        propsStyles={input.styles}
+        text={input.value}
+        onChangeText={(value) => input.onChangeText({value, index})}
+        isError={input.isError === error}
+      />
+    )
+  })
 
   const defaultModalStyles = isOpenedModal ? generalStyles.loading : generalStyles.hideFullScreenComponent;
 
@@ -37,7 +47,7 @@ const Modal = ({ onPress = () => {} }) => {
   return (
     <View style={{...styles.container, ...currentTheme.modalContainer, ...defaultModalStyles}}>
       <CustomFontText text={languageWords[modalTitle]} />
-      {!!modalInputText && <CustomInput text={modalInputText} isError={error === BOARD_NOT_FOUND} onChangeText={changeBoardTitle} />}
+      {!!inputsMap.length && inputsMap}
       <CustomFontText text={languageWords[modalText]} />
       {!!modalButtonTitle && <CustomButton disable={!modalTitle.length} onPress={onPress} text={languageWords[modalButtonTitle]} />}
     </View>

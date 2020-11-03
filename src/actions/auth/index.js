@@ -49,12 +49,10 @@ export const getUserDataRequest = () => (dispatch, getState) => {
   try {
     return dispatch(anyAxios({method: 'get', url: usersRoute}))
       .then(res => {
-        console.log('getUserDataRequest', res);
         dispatch(changeAuthData(res.data));
         return res.status;
       })
       .catch(e => {
-        console.error('getUserDataRequest', e, e.response.data);
         if(typeof e === 'object' && e.response) {
           dispatch({type: AUTH_REQUEST_FAILED, payload: {error: e.response.data.message}});
         }

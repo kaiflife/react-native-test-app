@@ -1,10 +1,10 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useRef, useEffect }  from 'react';
 import {StyleSheet, View} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {changeTheme} from "./helpers/addNewTheme";
 import {useDispatch, useSelector} from "react-redux";
-import {LoaderSvg} from "./components/Svgs";
+import {BoardsIcon, LoaderSvg} from "./components/Svgs";
 import AuthScreen from "./screens/AuthScreen";
 import {CHANGE_CURRENT_THEME} from "./actions/theme/action";
 import {changeLanguage} from "./helpers/changeLanguage";
@@ -16,11 +16,13 @@ import SettingsScreen from "./screens/SettingsScreen";
 import BoardsScreen from "./screens/BoardsScreen";
 import {_getStoreData} from "./helpers/storage";
 import {changeAuthData} from "./actions/auth";
+import { SettingsIcon } from "./components/Svgs";
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   const dispatch = useDispatch();
+  const navigationRef = useRef(null);
   const [isLoadingTheme, setIsLoadingTheme] = useState(true);
   const token = useSelector(state => state.authReducer.token);
   const firstName = useSelector(state => state.authReducer.firstName);
@@ -47,8 +49,16 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if(!token && firstName) {
-      navigation.reset();
+    if(!token && firstName && navigationRef.current) {
+      console.log(navigationRef);
+      if(navigationRef.current.reset) {
+        navigationRef.current.reset({
+          index: 0,
+          routes: [
+            {name: 'Authorization'}
+          ]
+        });
+      }
     }
   }, [token, firstName]);
 
@@ -63,16 +73,24 @@ export default function App() {
 
   const HomeNavigator = () => {
     return (
-      <Tab.Navigator>
-        <Tab.Screen name='Boards' component={BoardsScreen} />
-        <Tab.Screen name='Settings' component={SettingsScreen} />
+      <Tab.Navigator >
+        <Tab.Screen
+          name='Boards'
+          component={BoardsScreen}
+          options={{tabBarIcon: ({color}) => (<BoardsIcon color={color} />)}}
+        />
+        <Tab.Screen
+          options={{tabBarIcon: ({color}) => (<SettingsIcon color={color}/>)}}
+          name='Settings'
+          component={SettingsScreen}
+        />
         {/*{boardId && <Tab.Screen name='Board' component={BoardScreen} />}*/}
       </Tab.Navigator>
     );
   }
 
   const navigation = (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       {token ? <HomeNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );

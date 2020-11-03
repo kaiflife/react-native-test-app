@@ -19,6 +19,7 @@ export const DELETED_BOARD = 'board was deleted';
 export const EMPTY_DATA = 'empty data';
 export const CONNECTION_ERROR = 'Connection error';
 export const SERVER_NOT_RESPOND = 'Server is not responding';
+const BOARD_TITLE_INSTRUCTIONS = 'title length more then 50';
 
 const languages = {
   ru: {
@@ -38,7 +39,9 @@ const languages = {
     registration: 'Страница регистрации',
     noBoards: 'Досок нет',
     logout: 'Выйти из аккаунта',
+    createBoard: 'Создать доску',
 
+    [BOARD_TITLE_INSTRUCTIONS]: 'Длина заголовка должны быть меньше 50',
     [CONNECTION_ERROR]: 'Ошибка подключения',
     [SERVER_NOT_RESPOND]: 'Сервер не отвечает',
     [USER_NOT_FOUND]: 'Пользователь не найден',
@@ -57,6 +60,7 @@ const languages = {
     [COLUMN_NOT_FOUND]: 'Колонка не найдена',
   },
   eng: {
+    createBoard: 'Create board',
     signUp: 'Sign up',
     ready: 'Ready',
     cancel: 'Cancel',
@@ -76,6 +80,7 @@ const languages = {
     noBoards: 'You have no boards',
     logout: 'Logout',
 
+    [BOARD_TITLE_INSTRUCTIONS]: 'Title should be less then 50 symbols',
     [CONNECTION_ERROR]: 'Connection error',
     [SERVER_NOT_RESPOND]: 'Server is not responding',
     [USER_NOT_FOUND]: 'User not found',

@@ -1,4 +1,4 @@
-import {CHANGE_MODAL_DATA, OPEN_ERROR_MODAL} from "./action";
+import {CHANGE_MODAL_DATA, CLOSE_MODAL, OPEN_ERROR_MODAL} from "./action";
 
 export const changeModalData = (payload) => {
   return {
@@ -13,3 +13,5 @@ export const openErrorModal = (payload) => {
     payload
   }
 }
+
+export const closeModal = () => ({type: CLOSE_MODAL});

@@ -9,7 +9,7 @@ const CustomInput = ({
   placeholder = '',
   secureTextEntry,
   text = '',
-  onChange = () => {},
+  onChangeText = () => {},
   disable = false
 }) => {
   const currentTheme = useSelector(state => state.themeReducer.currentTheme);
@@ -17,7 +17,7 @@ const CustomInput = ({
   const languageWords = useSelector(state => state.languageReducer.languageWords);
   const disablePropsStyles = propsStyles.container && propsStyles.container.disable;
   const disableStyles = disable && (disablePropsStyles || styles.disableContainer);
-  const pressFunc = disable ? () => {} : onChange;
+  const pressFunc = disable ? () => {} : onChangeText;
   return (
     <View style={styles.container}>
       {isError && <CustomFontText text={languageWords[error]} propsStyles={currentTheme.appError} />}
