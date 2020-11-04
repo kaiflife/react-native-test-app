@@ -5,10 +5,10 @@ import {changeAuthData} from "../actions/auth";
 const JWT_EXPIRED = 'jwt expired';
 const INVALID_TOKEN = 'invalid token';
 
-const makeHeaders = ({token, multipartConfig}) => {
+const makeHeaders = ({accessToken, multipartConfig}) => {
   let headers = {};
-  if(token) {
-    headers.Authorization = `Bearer ${token}`;
+  if(accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
     if(multipartConfig) {
       headers['Content-Type'] = 'multipart/form-data';
     }
@@ -19,13 +19,13 @@ const makeHeaders = ({token, multipartConfig}) => {
     }};
 };
 
-export const postAxios = async ({url, body, token, multipartConfig}) => {
-  return axios.post(url, body, makeHeaders({token, multipartConfig}));
+export const postAxios = async ({url, body, accessToken, multipartConfig}) => {
+  return axios.post(url, body, makeHeaders({accessToken, multipartConfig}));
 };
 
-export const getAxios = ({url, params, token}) => {
+export const getAxios = ({url, params, accessToken}) => {
   const newParams = {params} || {};
-  const newHeaders = makeHeaders({token});
+  const newHeaders = makeHeaders({accessToken});
   const config = {
     ...newParams,
     ...newHeaders
@@ -33,56 +33,57 @@ export const getAxios = ({url, params, token}) => {
   return axios.get(url, config);
 };
 
-export const putAxios = ({url, body, token}) => {
-  return axios.put(url, body, makeHeaders({token}))
+export const putAxios = ({url, body, accessToken}) => {
+  return axios.put(url, body, makeHeaders({accessToken}))
 };
 
-export const deleteAxios = ({url, params, token}) => {
+export const deleteAxios = ({url, params, accessToken}) => {
   const data = params || {};
-  const authParams = token && {
-    ...makeHeaders({token}),
+  const authParams = accessToken && {
+    ...makeHeaders({accessToken}),
     ...data
   };
   return axios.delete(url, authParams)
 };
 
-const makeRefreshToken = ({token, refreshToken}) => {
+const makeRefreshToken = ({accessToken, refreshToken}) => {
   const body = {refreshToken};
   const url = refreshTokenUrl;
-  return postAxios({url, body, token}).then(response => response.data, reject => reject);
+  return postAxios({url, body, accessToken}).then(response => response.data, reject => reject);
 }
 
 let tokenRefreshPromise = null;
 
-const useAxios = async ({url, params, body, method, multipartConfig, token, refreshToken, dispatch}) => {
+const useAxios = async ({url, params, body, method, multipartConfig, accessToken, refreshToken, dispatch}) => {
   try {
     if (tokenRefreshPromise) {
       await tokenRefreshPromise;
     }
-    return await axiosFunctions[method]({url, params, body, token, multipartConfig});
+    return await axiosFunctions[method]({url, params, body, accessToken, multipartConfig});
   } catch (error) {
     const updateToken = async () => {
-      const tokenResponse = await makeRefreshToken({token, refreshToken});
-      const errorResponse = tokenResponse.response;
-      if(errorResponse && !errorResponse.data){
+      const tokenResponse = await makeRefreshToken({accessToken, refreshToken});
+      if(tokenResponse && tokenResponse.accessToken) {
+        await _setStoreData('tokens', {
+          accessToken: tokenResponse.accessToken,
+          refreshToken: tokenResponse.refreshToken
+        });
+        dispatch(changeAuthData({
+          accessToken: tokenResponse.accessToken, refreshToken: tokenResponse.refreshToken
+        }));
+        return tokenResponse.accessToken;
+      }
+      if(tokenResponse && !tokenResponse.response){
         throw tokenResponse;
       }
       const errorMessage = tokenResponse.response.data.message;
       if(errorMessage === INVALID_TOKEN || errorMessage === JWT_EXPIRED) {
         dispatch(changeAuthData({
-          token: null, refreshToken: null
+          accessToken: null, refreshToken: null
         }));
         await _clearStoreData();
         return;
       }
-      await _setStoreData('tokens', {
-        token: tokenResponse.token,
-        refreshToken: tokenResponse.refreshToken
-      });
-      dispatch(changeAuthData({
-        token: tokenResponse.token, refreshToken: tokenResponse.refreshToken
-      }));
-      return tokenResponse.token;
     }
     if(error && error.response && error.response.data) {
       const errorMessage = error.response.data.message;
@@ -90,7 +91,7 @@ const useAxios = async ({url, params, body, method, multipartConfig, token, refr
 
       if(isJWTInvalid) {
         await dispatch(changeAuthData({
-          token: null, refreshToken: null
+          accessToken: null, refreshToken: null
         }));
         await _clearStoreData();
         return;
@@ -106,13 +107,13 @@ const useAxios = async ({url, params, body, method, multipartConfig, token, refr
     }
     const newToken = await tokenRefreshPromise;
     tokenRefreshPromise = null;
-    return await axiosFunctions[method]({url, params, body, token: newToken, multipartConfig});
+    return await axiosFunctions[method]({url, params, body, accessToken: newToken, multipartConfig});
   }
 }
 
 export const anyAxios = (props) => (dispatch, getState) => {
-  const {token, refreshToken} = getState().authReducer;
-  return useAxios({...props, token, refreshToken, dispatch });
+  const {accessToken, refreshToken} = getState().authReducer;
+  return useAxios({...props, accessToken, refreshToken, dispatch });
 }
 const axiosFunctions = {
   get: getAxios,

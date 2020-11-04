@@ -11,7 +11,7 @@ import {useFocusEffect} from "@react-navigation/native";
 const SettingsScreen = () => {
 	const dispatch = useDispatch();
 	const languageWords = useSelector(state => state.languageReducer.languageWords);
-	const { error, email, password, firstName, lastName, token } = useSelector(state => state.authReducer);
+	const { error, email, password, firstName, lastName, accessToken } = useSelector(state => state.authReducer);
 	const [newUserData, setNewUserData] = useState({
 		email: '', password: '', firstName: '', lastName: ''
 	});
@@ -29,7 +29,7 @@ const SettingsScreen = () => {
 
 	const onFocusBoards = useCallback(() => {
 		initialRequests();
-	}, [token])
+	}, [accessToken])
 
 	useFocusEffect(onFocusBoards);
 
@@ -39,7 +39,7 @@ const SettingsScreen = () => {
 
 	const onLogout = useCallback(() => {
 		dispatch(clearAuthData());
-	}, [token]);
+	}, [accessToken]);
 
 	const inputsValues = [
 		{id: 0, type: 'firstName', text: newUserData.firstName || firstName, errorType: FULL_NAME_INSTRUCTIONS},

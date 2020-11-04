@@ -14,7 +14,7 @@ const AuthScreen = () => {
 	const [loginData, setLoginData] = useState({email: 'test@mail.ru', password: 'qwerty123XD'});
 	const [isLoading, setIsLoading] = useState(false);
 	const languageWords = useSelector(state => state.languageReducer.languageWords);
-	const token = useSelector(state => state.authReducer.token);
+	const accessToken = useSelector(state => state.authReducer.accessToken);
 
 	const changeAuthData = (value, type) => {
 		setLoginData({...loginData, [type]: value});
@@ -32,10 +32,10 @@ const AuthScreen = () => {
 	}
 
 	useEffect(() => {
-		if(token) {
+		if(accessToken) {
 			navigation.push('Boards', {screen: 'Boards'});
 		}
-	}, [token]);
+	}, [accessToken]);
 
 	const inputsValues = [
 		{id: 0, type: 'email', text: loginData.email},

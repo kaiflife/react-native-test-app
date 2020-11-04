@@ -17,7 +17,7 @@ export const authRequest = (payload) => (dispatch) => {
     return axios.post(authUrl, payload)
       .then(result => {
         dispatch(changeAuthData(result.data));
-        _setStoreData('tokens', result.data.token);
+        _setStoreData('tokens', result.data.accessToken);
         return;
       })
       .catch(e => {

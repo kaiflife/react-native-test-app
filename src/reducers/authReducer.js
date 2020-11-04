@@ -6,7 +6,7 @@ import {
 } from "../actions/auth/action";
 
 const initialState = {
-	token: null,
+	accessToken: null,
 	id: null,
 	refreshToken: '',
 	firstName: '',
@@ -25,7 +25,7 @@ const themeReducer = (state = initialState, action) => {
 		case AUTH_SUCCESS: {
 			return  {
 				...state,
-				token: payload.token,
+				accessToken: payload.accessToken,
 			};
 		}
 		case AUTH_REQUEST_FAILED: {

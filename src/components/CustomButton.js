@@ -1,7 +1,8 @@
-import { TouchableOpacity, View, StyleSheet, Text } from "react-native";
+import { TouchableOpacity, View, StyleSheet } from "react-native";
 import React from "react";
 import CustomFontText from "./CustomFontText";
 import {useSelector} from "react-redux";
+import {generalStyles} from "../constants/theme";
 
 const CustomButton = ({ text, onPress, disable, propsStyles = {} }) => {
 	const currentTheme = useSelector(state => state.themeReducer.currentTheme);
@@ -12,13 +13,13 @@ const CustomButton = ({ text, onPress, disable, propsStyles = {} }) => {
   return (
 	<Component
 		onPress={onPress}
-		style={{
-			...buttonStyles.container,
-			...currentTheme.defaultButton,
-			...propsStyles.container,
-			...disabledStyles
-		}}>
-	  <CustomFontText text={text} propsStyles={{...buttonStyles.text, ...currentTheme.defaultText, ...propsStyles.text}} />
+		style={[
+			buttonStyles.container,
+			currentTheme.defaultButton,
+			propsStyles.container,
+			disabledStyles,
+		]}>
+	  <CustomFontText text={text} propsStyles={[buttonStyles.text, currentTheme.defaultText, propsStyles.text]} />
 	</Component>
   );
 }

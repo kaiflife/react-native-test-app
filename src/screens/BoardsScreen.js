@@ -3,18 +3,20 @@ import {View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import CustomFontText from "../components/CustomFontText";
-import {createBoardRequest, getBoardsRequest} from "../actions/boards";
+import {changeBoardsData, createBoardRequest, getBoardsRequest} from "../actions/boards";
 import {changeModalData, closeModal, openErrorModal} from "../actions/modal";
 import CustomButton from "../components/CustomButton";
+import {generalStyles} from "../constants/theme";
+import Gallery from "../components/Gallary";
 
 const BoardsScreen = () => {
 	const dispatch = useDispatch();
 	const navigation = useNavigation();
 	const [isLoading, setIsLoading] = useState(false);
-	const boards = useSelector(state => state.boardsReducer.boards);
+	const { boardsType, invitesBoards, ownersBoards} = useSelector(state => state.boardsReducer);
 	const languageWords = useSelector(state => state.languageReducer.languageWords);
 	const currentTheme = useSelector(state => state.themeReducer.currentTheme);
-	const token = useSelector(state => state.authReducer.token);
+	const accessToken = useSelector(state => state.authReducer.accessToken);
 
 	const onGetBoards = async () => {
 		console.log('getBoardsRequest');
@@ -27,13 +29,15 @@ const BoardsScreen = () => {
 
 	const onFocusBoards = useCallback(() => {
 		onGetBoards();
-	}, [token])
+	}, [accessToken])
 
 	useFocusEffect(onFocusBoards);
 
 	const sendCreateRequest = async () => {
 		setIsLoading(true);
+		dispatch(changeModalData({isLoading: true}));
 		await dispatch(createBoardRequest());
+		await dispatch(getBoardsRequest());
 		dispatch(closeModal());
 		setIsLoading(false);
 	}
@@ -58,24 +62,28 @@ const BoardsScreen = () => {
 					value: '',
 				},
 			],
-			modalButtonApply: {
-				text: 'create',
-				onPress: async (title) => sendCreateRequest(title)
-			},
-			modalButtonCancel: {
-				text: 'cancel',
-				onPress: () => onCloseModal()
-			},
+			modalFooterStyles: {flexDirection: 'row', justifyContent: 'space-between', width: '100%'},
+			footerButtons: [
+				{text: 'create', onPress: async () => sendCreateRequest()},
+				{text: 'cancel', onPress: () => onCloseModal()}
+			],
 		}));
+	};
+
+	const boardsTypeValues = boardsType === 'all' ? [...ownersBoards, ...invitesBoards] : 'owner' ? ownersBoards : invitesBoards;
+
+	const selectBoard = (boardId) => {
+		dispatch(changeBoardsData({selectedBoardId: boardId}))
+		navigation.push('Board');
 	}
 
-	const boardsComponents = boards.map(item => {
+	const boardsComponents = boardsTypeValues.map(item => {
 		const participantsCount = item.participantsId ? item.participantsId.length : 0;
-		const ownersCount = item.ownersId ? item.ownersId.length : 0;
+		const ownersCount = item.ownersId.length;
 		const membersCount = participantsCount + ownersCount;
 		return (
-			<View>
-				<TouchableOpacity onPress={() => navigation.push('Board')}>
+			<View style={{...generalStyles.boardItem, ...currentTheme.boardItem}} key={item.id}>
+				<TouchableOpacity style={{flex: 1, width: '100%'}} onPress={() => selectBoard(item.id)}>
 					<CustomFontText text={item.title} />
 					<View>
 						<CustomFontText text={membersCount} />
@@ -87,11 +95,10 @@ const BoardsScreen = () => {
 		);
 	});
 
-
 	return (
-		<View>
-			<ScrollView horizontal style={{...styles.container, ...currentTheme.boardsContainer}}>
-				{(!!boardsComponents.length && boardsComponents) || <CustomFontText propsStyles={currentTheme.noBoards} text={languageWords.noBoards} />}
+		<View style={styles.container}>
+			<ScrollView style={{...styles.scrollViewContainer, ...currentTheme.boardsContainer}}>
+				{(!!boardsComponents.length && <Gallery component={boardsComponents} />) || <CustomFontText propsStyles={currentTheme.noBoards} text={languageWords.noBoards} />}
 			</ScrollView>
 			<CustomButton text={languageWords.createBoard} onPress={openModal} />
 		</View>
@@ -101,8 +108,13 @@ const BoardsScreen = () => {
 
 const styles = StyleSheet.create({
 	container: {
-		padding: 40,
-		flex: 1,
+		padding: 20,
+		justifyContent: 'space-between',
+		height: '100%',
+		width: '100%',
+	},
+	scrollViewContainer: {
+		width: '100%',
 	}
 });
 

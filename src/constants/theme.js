@@ -11,6 +11,9 @@ const theme = {
     boardsContainer: {
       backgroundColor: 'white',
     },
+    boardItem : {
+      backgroundColor: '#a8a850',
+    },
     defaultInputPlaceholder: 'white',
     defaultInput: {
       color: 'white',
@@ -55,6 +58,9 @@ const theme = {
     },
     defaultInputPlaceholder: 'gray',
     modalContainer: {},
+    boardItem : {
+      backgroundColor: 'lightblue',
+    },
   }
 }
 
@@ -74,6 +80,15 @@ const generalStyles = {
     opacity: 0,
     padding: 0,
     margin: 0,
+  },
+  modalFooterButtonStyles: {
+    container: {
+      width: '47%',
+    },
+  },
+  boardItem: {
+    flexBasis: '100%',
+    marginBottom: 5,
   }
 };
 

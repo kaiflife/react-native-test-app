@@ -1,7 +1,10 @@
 import {BOARDS_REQUEST_FAILED, CHANGE_BOARDS_DATA} from "../actions/boards/action";
 
 const initialState = {
-	boards: [],
+	ownersBoards: [],
+	invitesBoards: [],
+	boardsType: 'owner',
+	selectedBoardId: null,
 	users: [],
 	boardId: null,
 	error: '',

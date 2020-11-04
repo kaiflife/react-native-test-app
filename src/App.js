@@ -24,7 +24,7 @@ export default function App() {
   const dispatch = useDispatch();
   const navigationRef = useRef(null);
   const [isLoadingTheme, setIsLoadingTheme] = useState(true);
-  const token = useSelector(state => state.authReducer.token);
+  const accessToken = useSelector(state => state.authReducer.accessToken);
   const firstName = useSelector(state => state.authReducer.firstName);
 
   const preloadSettings = async () => {
@@ -39,9 +39,9 @@ export default function App() {
   useEffect(() => {
     preloadSettings()
       .then(async () => {
-        const token = await _getStoreData('tokens');
-        if(token) {
-          dispatch(changeAuthData({token}));
+        const accessToken = await _getStoreData('tokens');
+        if(accessToken) {
+          dispatch(changeAuthData({accessToken}));
         }
         setIsLoadingTheme(false);
       })
@@ -49,7 +49,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if(!token && firstName && navigationRef.current) {
+    if(!accessToken && firstName && navigationRef.current) {
       console.log(navigationRef);
       if(navigationRef.current.reset) {
         navigationRef.current.reset({
@@ -60,7 +60,7 @@ export default function App() {
         });
       }
     }
-  }, [token, firstName]);
+  }, [accessToken, firstName]);
 
   const AuthNavigator = () => {
     return (
@@ -91,7 +91,7 @@ export default function App() {
 
   const navigation = (
     <NavigationContainer ref={navigationRef}>
-      {token ? <HomeNavigator /> : <AuthNavigator />}
+      {accessToken ? <HomeNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 

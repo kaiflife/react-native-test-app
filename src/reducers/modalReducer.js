@@ -3,12 +3,13 @@ import {CONNECTION_ERROR, SERVER_NOT_RESPOND} from "../constants/languages";
 
 const initialState = {
 	isOpenedModal: false,
+	isLoading: false,
 	modalTitle: '',
 	modalButtonTitle: '',
 	hideTimer: null,
 	modalInputsInfo: [],
-	modalButtonApply: {},
-	modalButtonCancel: {},
+	footerButtons: [],
+	modalFooterStyles: {},
 };
 
 const modalReducer = (state = initialState, action) => {

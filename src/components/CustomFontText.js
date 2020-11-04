@@ -4,12 +4,12 @@ import {Text, StyleSheet} from "react-native";
 
 const CustomFontText = ({text = '', propsStyles = {}, fontFamily = ''}) => {
 	const currentTheme = useSelector(state => state.themeReducer.currentTheme);
-	const allStyles = {
-		...fontTextStyles.lowFont,
-		...currentTheme.defaultText,
-		...propsStyles,
-		fontFamily: fontFamily
-	};
+	const allStyles = [
+		fontTextStyles.lowFont,
+		currentTheme.defaultText,
+		propsStyles,
+		{fontFamily},
+	];
 
 	return (
 		<Text style={allStyles}>{text}</Text>
