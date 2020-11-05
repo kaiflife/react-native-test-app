@@ -5,7 +5,7 @@ import CustomInput from "../components/CustomInput";
 import {useDispatch, useSelector} from "react-redux";
 import {EMAIL_INSTRUCTIONS, FULL_NAME_INSTRUCTIONS, PASSWORD_INSTRUCTIONS} from "../constants/languages";
 import CustomButton from "../components/CustomButton";
-import {clearAuthData, getUserDataRequest, updateUserDataRequest} from "../actions/auth";
+import {clearAuthData, getUserDataRequest, logoutRequest, updateUserDataRequest} from "../actions/auth";
 import {useFocusEffect} from "@react-navigation/native";
 
 const SettingsScreen = () => {
@@ -37,9 +37,9 @@ const SettingsScreen = () => {
 		await dispatch(updateUserDataRequest(newUserData));
 	};
 
-	const onLogout = useCallback(() => {
-		dispatch(clearAuthData());
-	}, [accessToken]);
+	const onLogout = () => {
+		dispatch(logoutRequest());
+	};
 
 	const inputsValues = [
 		{id: 0, type: 'firstName', text: newUserData.firstName || firstName, errorType: FULL_NAME_INSTRUCTIONS},

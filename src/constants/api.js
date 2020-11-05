@@ -8,6 +8,8 @@ const tasksUrl = `${apiUrl}/tasks`;
 const columnsUrl = `${apiUrl}/columns`;
 const boardsUrl = `${apiUrl}/boards`;
 
+const logoutUrl = `${usersRoute}/logout`;
+
 const refreshTokenUrl = `${usersRoute}/refreshToken`;
 
 export {
@@ -18,4 +20,5 @@ export {
   boardsUrl,
   usersRoute,
   refreshTokenUrl,
+  logoutUrl,
 };

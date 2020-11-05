@@ -17,15 +17,16 @@ const BoardScreen = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [searchInputText, setSearchInputText] = useState('');
 	const [searchedBoards, setSearchedBoards] = useState([]);
+	const selectedBoardId = useSelector(state => state.boardsReducer.selectedBoardId);
 	const { boardsType, invitesBoards, ownersBoards} = useSelector(state => state.boardsReducer);
 	const languageWords = useSelector(state => state.languageReducer.languageWords);
 	const currentTheme = useSelector(state => state.themeReducer.currentTheme);
 	const accessToken = useSelector(state => state.authReducer.accessToken);
 
 	const onGetBoards = async () => {
-		console.log('getBoardsRequest');
+		console.log('getBoardRequest');
 		try {
-			await dispatch(getBoardsRequest());
+			await dispatch(getBoardsRequest(selectedBoardId));
 		} catch (e) {
 			dispatch(openErrorModal());
 		}
@@ -33,15 +34,15 @@ const BoardScreen = () => {
 
 	const onFocusBoards = useCallback(() => {
 		onGetBoards();
-	}, [accessToken])
+	}, [accessToken, selectedBoardId]);
 
 	useFocusEffect(onFocusBoards);
 
-	const sendCreateRequest = async () => {
+	const sendCreateColumnRequest = async () => {
 		setIsLoading(true);
 		dispatch(changeModalData({isLoading: true}));
-		await dispatch(createBoardRequest());
-		await dispatch(getBoardsRequest());
+		await dispatch(createColumnRequest());
+		await dispatch(getBoardsRequest(selectedBoardId));
 		dispatch(closeModal());
 		setIsLoading(false);
 	}
@@ -53,7 +54,7 @@ const BoardScreen = () => {
 	const openModal = () => {
 		dispatch(changeModalData({
 			isOpenedModal: true,
-			modalTitle: 'createBoard',
+			modalTitle: 'createColumn',
 			modalContainerStyles: {backgroundColor: 'white', padding: 40},
 			modalInputsInfo: [
 				{
@@ -68,15 +69,13 @@ const BoardScreen = () => {
 			],
 			modalFooterStyles: {flexDirection: 'row', justifyContent: 'space-between', width: '100%'},
 			footerButtons: [
-				{text: 'create', onPress: async () => sendCreateRequest()},
+				{text: 'create', onPress: async () => sendCreateColumnRequest()},
 				{text: 'cancel', onPress: () => onCloseModal()}
 			],
 		}));
 	};
 
 	const onChangeSearchText = newSearchText => {
-		console.log(newSearchText);
-		console.log(searchedBoards);
 		setSearchedBoards(boardsTypeValues.filter(board => board.title.toLowerCase().includes(newSearchText.toLowerCase())));
 		setSearchInputText(newSearchText);
 	}
@@ -111,11 +110,11 @@ const BoardScreen = () => {
 
 	return (
 		<View style={styles.container}>
-			<CustomInput propsStyles={{input: {marginBottom: 0}}} text={searchInputText} onChangeText={onChangeSearchText} placeholder={'Search by board title'} />
+			<CustomInput propsStyles={{input: {marginBottom: 0}}} text={searchInputText} onChangeText={onChangeSearchText} placeholder={'Search by card title'} />
 			<View style={styles.boardsContainer}>
 				<CustomScrollView component={galleryComponent} />
 			</View>
-			<CustomButton text={languageWords.createBoard} onPress={openModal} />
+			<CustomButton text={languageWords.createColumn} onPress={openModal} />
 		</View>
 
 	);

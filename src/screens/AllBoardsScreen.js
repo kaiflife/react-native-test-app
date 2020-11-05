@@ -1,5 +1,5 @@
-import React, {useCallback, useState} from "react";
-import {View, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
+import React, {useEffect, useCallback, useState} from "react";
+import {View, StyleSheet, TouchableOpacity} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import CustomFontText from "../components/CustomFontText";
@@ -50,6 +50,12 @@ const AllBoardsScreen = () => {
 		dispatch(closeModal());
 	}
 
+	useEffect(() => {
+		return () => {
+			console.log('asd');
+		}
+	}, []);
+
 	const openModal = () => {
 		dispatch(changeModalData({
 			isOpenedModal: true,
@@ -75,8 +81,6 @@ const AllBoardsScreen = () => {
 	};
 
 	const onChangeSearchText = newSearchText => {
-		console.log(newSearchText);
-		console.log(searchedBoards);
 		setSearchedBoards(boardsTypeValues.filter(board => board.title.toLowerCase().includes(newSearchText.toLowerCase())));
 		setSearchInputText(newSearchText);
 	}
@@ -86,7 +90,6 @@ const AllBoardsScreen = () => {
 
 	const selectBoard = (boardId) => {
 		dispatch(changeBoardsData({selectedBoardId: boardId}))
-		console.log(navigation);
 	}
 
 	const boardsComponents = filteredBoards.map(item => {

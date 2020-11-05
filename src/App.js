@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {changeTheme} from "./helpers/addNewTheme";
 import {useDispatch, useSelector} from "react-redux";
-import {BoardsIcon, LoaderSvg, OneBoardIcon} from "./components/Svgs";
+import {AuthIcon, BoardsIcon, LoaderSvg, OneBoardIcon, RegistrationIcon} from "./components/Svgs";
 import AuthScreen from "./screens/AuthScreen";
 import {CHANGE_CURRENT_THEME} from "./actions/theme/action";
 import {changeLanguage} from "./helpers/changeLanguage";
@@ -18,6 +18,7 @@ import {_getStoreData} from "./helpers/storage";
 import {changeAuthData} from "./actions/auth/action";
 import { SettingsIcon } from "./components/Svgs";
 import BoardScreen from "./screens/BoardScreen";
+import {changeBoardsData} from "./actions/boards";
 
 const Tab = createBottomTabNavigator();
 
@@ -51,9 +52,9 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if(!accessToken && firstName && navigationRef.current) {
-      console.log(navigationRef);
-      if(navigationRef.current.reset) {
+    if(!accessToken) {
+      dispatch(changeBoardsData({selectedBoardId: null}));
+      if(firstName && navigationRef.current && navigationRef.current.reset) {
         navigationRef.current.reset({
           index: 0,
           routes: [
@@ -67,8 +68,16 @@ export default function App() {
   const AuthNavigator = () => {
     return (
       <Tab.Navigator>
-        <Tab.Screen name='Authorization' component={AuthScreen} />
-        <Tab.Screen name='Registration' component={RegistrationScreen} />
+        <Tab.Screen
+          name='Authorization'
+          options={{tabBarIcon: ({color}) => <AuthIcon color={color} />}}
+          component={AuthScreen}
+        />
+        <Tab.Screen
+          name='Registration'
+          options={{tabBarIcon: ({color}) => <RegistrationIcon color={color} />}}
+          component={RegistrationScreen}
+        />
       </Tab.Navigator>
     );
   }
@@ -79,18 +88,18 @@ export default function App() {
         <Tab.Screen
           name='Boards'
           component={AllBoardsScreen}
-          options={{tabBarIcon: ({color}) => (<BoardsIcon color={color} />)}}
+          options={{tabBarIcon: ({color}) => <BoardsIcon color={color} />}}
         />
         {
           selectedBoardId &&
           <Tab.Screen
             name='Board'
-            options={{tabBarIcon: ({color}) => (<OneBoardIcon color={color}/>)}}
+            options={{tabBarIcon: ({color}) => <OneBoardIcon color={color}/>}}
             component={BoardScreen}
           />
         }
         <Tab.Screen
-          options={{tabBarIcon: ({color}) => (<SettingsIcon color={color}/>)}}
+          options={{tabBarIcon: ({color}) => <SettingsIcon color={color}/>}}
           name='Settings'
           component={SettingsScreen}
         />
