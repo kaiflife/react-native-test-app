@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {changeTheme} from "./helpers/addNewTheme";
 import {useDispatch, useSelector} from "react-redux";
-import {BoardsIcon, LoaderSvg} from "./components/Svgs";
+import {BoardsIcon, LoaderSvg, OneBoardIcon} from "./components/Svgs";
 import AuthScreen from "./screens/AuthScreen";
 import {CHANGE_CURRENT_THEME} from "./actions/theme/action";
 import {changeLanguage} from "./helpers/changeLanguage";
@@ -13,10 +13,11 @@ import languages from "./constants/languages";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import Modal from "./components/Modal";
 import SettingsScreen from "./screens/SettingsScreen";
-import BoardsScreen from "./screens/BoardsScreen";
+import AllBoardsScreen from "./screens/AllBoardsScreen";
 import {_getStoreData} from "./helpers/storage";
-import {changeAuthData} from "./actions/auth";
+import {changeAuthData} from "./actions/auth/action";
 import { SettingsIcon } from "./components/Svgs";
+import BoardScreen from "./screens/BoardScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,6 +25,7 @@ export default function App() {
   const dispatch = useDispatch();
   const navigationRef = useRef(null);
   const [isLoadingTheme, setIsLoadingTheme] = useState(true);
+  const selectedBoardId = useSelector(state => state.boardsReducer.selectedBoardId);
   const accessToken = useSelector(state => state.authReducer.accessToken);
   const firstName = useSelector(state => state.authReducer.firstName);
 
@@ -76,15 +78,22 @@ export default function App() {
       <Tab.Navigator >
         <Tab.Screen
           name='Boards'
-          component={BoardsScreen}
+          component={AllBoardsScreen}
           options={{tabBarIcon: ({color}) => (<BoardsIcon color={color} />)}}
         />
+        {
+          selectedBoardId &&
+          <Tab.Screen
+            name='Board'
+            options={{tabBarIcon: ({color}) => (<OneBoardIcon color={color}/>)}}
+            component={BoardScreen}
+          />
+        }
         <Tab.Screen
           options={{tabBarIcon: ({color}) => (<SettingsIcon color={color}/>)}}
           name='Settings'
           component={SettingsScreen}
         />
-        {/*{boardId && <Tab.Screen name='Board' component={BoardScreen} />}*/}
       </Tab.Navigator>
     );
   }

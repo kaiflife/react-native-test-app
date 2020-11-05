@@ -40,7 +40,11 @@ const languages = {
     noBoards: 'Досок нет',
     logout: 'Выйти из аккаунта',
     createBoard: 'Создать доску',
+    participantsCount: 'Приглашенные',
+    ownersCount: 'Владельцы',
+    membersCount: 'Всего',
 
+    ['Search by board title']: 'Поиск по заголовку',
     [BOARD_TITLE_INSTRUCTIONS]: 'Длина заголовка должны быть меньше 50',
     [CONNECTION_ERROR]: 'Ошибка подключения',
     [SERVER_NOT_RESPOND]: 'Сервер не отвечает',
@@ -60,6 +64,10 @@ const languages = {
     [COLUMN_NOT_FOUND]: 'Колонка не найдена',
   },
   eng: {
+    participantsCount: 'Participants',
+    ownersCount: 'Owners',
+    membersCount: 'All Members',
+    ['Search by board title']: 'Search by board title',
     createBoard: 'Create board',
     signUp: 'Sign up',
     ready: 'Ready',

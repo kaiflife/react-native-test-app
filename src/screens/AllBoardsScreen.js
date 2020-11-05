@@ -8,11 +8,15 @@ import {changeModalData, closeModal, openErrorModal} from "../actions/modal";
 import CustomButton from "../components/CustomButton";
 import {generalStyles} from "../constants/theme";
 import Gallery from "../components/Gallary";
+import CustomScrollView from "../components/CustomScrollView";
+import CustomInput from "../components/CustomInput";
 
-const BoardsScreen = () => {
+const AllBoardsScreen = () => {
 	const dispatch = useDispatch();
 	const navigation = useNavigation();
 	const [isLoading, setIsLoading] = useState(false);
+	const [searchInputText, setSearchInputText] = useState('');
+	const [searchedBoards, setSearchedBoards] = useState([]);
 	const { boardsType, invitesBoards, ownersBoards} = useSelector(state => state.boardsReducer);
 	const languageWords = useSelector(state => state.languageReducer.languageWords);
 	const currentTheme = useSelector(state => state.themeReducer.currentTheme);
@@ -70,36 +74,47 @@ const BoardsScreen = () => {
 		}));
 	};
 
+	const onChangeSearchText = newSearchText => {
+		console.log(newSearchText);
+		console.log(searchedBoards);
+		setSearchedBoards(boardsTypeValues.filter(board => board.title.toLowerCase().includes(newSearchText.toLowerCase())));
+		setSearchInputText(newSearchText);
+	}
+
 	const boardsTypeValues = boardsType === 'all' ? [...ownersBoards, ...invitesBoards] : 'owner' ? ownersBoards : invitesBoards;
+	const filteredBoards = !!searchInputText.length ? searchedBoards : boardsTypeValues;
 
 	const selectBoard = (boardId) => {
 		dispatch(changeBoardsData({selectedBoardId: boardId}))
-		navigation.push('Board');
+		console.log(navigation);
 	}
 
-	const boardsComponents = boardsTypeValues.map(item => {
+	const boardsComponents = filteredBoards.map(item => {
 		const participantsCount = item.participantsId ? item.participantsId.length : 0;
 		const ownersCount = item.ownersId.length;
-		const membersCount = participantsCount + ownersCount;
+		const membersCount = `${languageWords.membersCount}: ${participantsCount + ownersCount}`;
 		return (
-			<View style={{...generalStyles.boardItem, ...currentTheme.boardItem}} key={item.id}>
-				<TouchableOpacity style={{flex: 1, width: '100%'}} onPress={() => selectBoard(item.id)}>
-					<CustomFontText text={item.title} />
+			<View style={[generalStyles.boardItem, currentTheme.boardItem]} key={item.id}>
+				<TouchableOpacity style={generalStyles.boardClickContainer} onPress={() => selectBoard(item.id)}>
+					<CustomFontText propsStyles={[generalStyles.boardTitle]} text={item.title} />
 					<View>
 						<CustomFontText text={membersCount} />
-						<CustomFontText text={participantsCount} />
-						<CustomFontText text={ownersCount} />
+						<CustomFontText text={`${languageWords.participantsCount}: ${participantsCount}`} />
+						<CustomFontText text={`${languageWords.ownersCount}: ${ownersCount}`} />
 					</View>
 				</TouchableOpacity>
 			</View>
 		);
 	});
 
+	const galleryComponent = <Gallery components={boardsComponents} noComponentsText={languageWords.noBoards} />;
+
 	return (
 		<View style={styles.container}>
-			<ScrollView style={{...styles.scrollViewContainer, ...currentTheme.boardsContainer}}>
-				{(!!boardsComponents.length && <Gallery component={boardsComponents} />) || <CustomFontText propsStyles={currentTheme.noBoards} text={languageWords.noBoards} />}
-			</ScrollView>
+			<CustomInput propsStyles={{input: {marginBottom: 0}}} text={searchInputText} onChangeText={onChangeSearchText} placeholder={'Search by board title'} />
+			<View style={styles.boardsContainer}>
+				<CustomScrollView component={galleryComponent} />
+			</View>
 			<CustomButton text={languageWords.createBoard} onPress={openModal} />
 		</View>
 
@@ -113,9 +128,9 @@ const styles = StyleSheet.create({
 		height: '100%',
 		width: '100%',
 	},
-	scrollViewContainer: {
-		width: '100%',
-	}
+	boardsContainer: {
+		height: '75%'
+	},
 });
 
-export default React.memo(BoardsScreen);
+export default React.memo(AllBoardsScreen);

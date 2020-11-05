@@ -1,10 +1,14 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import CustomFontText from "./CustomFontText";
+import {useSelector} from "react-redux";
 
-const Gallery = ({component, propsStyles = {}, isHorizontal = false}) => {
+const Gallery = ({components = [], noComponentsText = 'No items', propsStyles = {}, isHorizontal = false}) => {
+  const currentTheme = useSelector(state => state.themeReducer.currentTheme);
+  const languageWords = useSelector(state => state.languageReducer.languageWords);
   return (
     <View style={[styles.container, styles.horizontalContainer, propsStyles]}>
-      {component}
+      {!components.length ? <CustomFontText propsStyles={[currentTheme.noBoards]} text={languageWords[noComponentsText]} /> : components}
     </View>
   )
 };

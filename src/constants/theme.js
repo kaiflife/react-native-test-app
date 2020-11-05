@@ -13,6 +13,7 @@ const theme = {
     },
     boardItem : {
       backgroundColor: '#a8a850',
+      borderColor: 'orange',
     },
     defaultInputPlaceholder: 'white',
     defaultInput: {
@@ -59,7 +60,8 @@ const theme = {
     defaultInputPlaceholder: 'gray',
     modalContainer: {},
     boardItem : {
-      backgroundColor: 'lightblue',
+      backgroundColor: '#b2e37f',
+      borderColor: '#6d4444',
     },
   }
 }
@@ -87,9 +89,23 @@ const generalStyles = {
     },
   },
   boardItem: {
-    flexBasis: '100%',
-    marginBottom: 5,
-  }
+    flexBasis: '49%',
+    marginBottom: '2%',
+    borderWidth: 1,
+    borderRadius: 4,
+  },
+  boardClickContainer: {
+    flex: 1,
+    width: '100%',
+    padding: 20,
+  },
+  boardTitle: {
+    alignSelf: 'center',
+    fontSize: 20,
+  },
+  defaultText: {
+    fontSize: 16,
+  },
 };
 
 export {

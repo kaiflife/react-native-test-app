@@ -1,12 +1,14 @@
 import React from 'react';
 import {useSelector} from "react-redux";
 import {Text, StyleSheet} from "react-native";
+import {generalStyles} from "../constants/theme";
 
 const CustomFontText = ({text = '', propsStyles = {}, fontFamily = ''}) => {
 	const currentTheme = useSelector(state => state.themeReducer.currentTheme);
 	const allStyles = [
 		fontTextStyles.lowFont,
 		currentTheme.defaultText,
+		generalStyles.defaultText,
 		propsStyles,
 		{fontFamily},
 	];

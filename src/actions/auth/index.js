@@ -1,16 +1,9 @@
 import axios from 'axios';
 import {authUrl, boardsUrl, registrationUrl, usersRoute} from "../../constants/api";
-import {AUTH_REQUEST_FAILED, CHANGE_AUTH_DATA, CLEAR_AUTH_DATA} from "./action";
+import {AUTH_REQUEST_FAILED, CHANGE_AUTH_DATA, changeAuthData, CLEAR_AUTH_DATA} from "./action";
 import {openErrorModal} from "../modal";
 import {_setStoreData} from "../../helpers/storage";
 import {anyAxios} from "../../helpers/useAxios";
-
-export const changeAuthData = payload => {
-  return {
-    type: CHANGE_AUTH_DATA,
-    payload,
-  }
-}
 
 export const authRequest = (payload) => (dispatch) => {
   try {

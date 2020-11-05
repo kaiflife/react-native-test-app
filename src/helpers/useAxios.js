@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {refreshTokenUrl} from "../constants/api";
 import { _setStoreData, _clearStoreData } from "./storage";
-import {changeAuthData} from "../actions/auth";
+import {changeAuthData} from "../actions/auth/action";
 const JWT_EXPIRED = 'jwt expired';
 const INVALID_TOKEN = 'invalid token';
 
@@ -69,7 +69,8 @@ const useAxios = async ({url, params, body, method, multipartConfig, accessToken
           refreshToken: tokenResponse.refreshToken
         });
         dispatch(changeAuthData({
-          accessToken: tokenResponse.accessToken, refreshToken: tokenResponse.refreshToken
+          accessToken: tokenResponse.accessToken,
+          refreshToken: tokenResponse.refreshToken
         }));
         return tokenResponse.accessToken;
       }
