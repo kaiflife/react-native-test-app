@@ -37,7 +37,7 @@ const theme = {
     defaultButton: {
       borderColor: 'black',
       borderWidth: 2,
-      backgroundColor: 'orange',
+      backgroundColor: '#ffa200',
     },
     appError: {
       width: '100%',
@@ -63,6 +63,10 @@ const theme = {
       backgroundColor: '#b2e37f',
       borderColor: '#6d4444',
     },
+    columnItem: {
+      backgroundColor: '#9d4242',
+      borderColor: '#b2e37f',
+    }
   }
 }
 

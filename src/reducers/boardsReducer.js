@@ -5,6 +5,8 @@ const initialState = {
 	invitesBoards: [],
 	boardsType: 'owner',
 	selectedBoardId: null,
+	columns: [],
+	cards: [],
 	users: [],
 	boardId: null,
 	error: '',

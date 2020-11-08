@@ -1,7 +1,7 @@
-import React, {useEffect, useCallback, useState} from "react";
+import React, {useCallback, useState} from "react";
 import {View, StyleSheet, TouchableOpacity} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
-import {useNavigation, useFocusEffect} from '@react-navigation/native';
+import {useNavigation, TabActions, useFocusEffect} from '@react-navigation/native';
 import CustomFontText from "../components/CustomFontText";
 import {changeBoardsData, createBoardRequest, getBoardsRequest} from "../actions/boards";
 import {changeModalData, closeModal, openErrorModal} from "../actions/modal";
@@ -17,13 +17,13 @@ const AllBoardsScreen = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [searchInputText, setSearchInputText] = useState('');
 	const [searchedBoards, setSearchedBoards] = useState([]);
+	const jumpToAction = TabActions.jumpTo('Board');
 	const { boardsType, invitesBoards, ownersBoards} = useSelector(state => state.boardsReducer);
 	const languageWords = useSelector(state => state.languageReducer.languageWords);
 	const currentTheme = useSelector(state => state.themeReducer.currentTheme);
 	const accessToken = useSelector(state => state.authReducer.accessToken);
 
 	const onGetBoards = async () => {
-		console.log('getBoardsRequest');
 		try {
 			await dispatch(getBoardsRequest());
 		} catch (e) {
@@ -37,10 +37,10 @@ const AllBoardsScreen = () => {
 
 	useFocusEffect(onFocusBoards);
 
-	const sendCreateRequest = async () => {
+	const sendCreateColumnRequest = async () => {
 		setIsLoading(true);
 		dispatch(changeModalData({isLoading: true}));
-		await dispatch(createBoardRequest());
+		await dispatch(createColumnRequest());
 		await dispatch(getBoardsRequest());
 		dispatch(closeModal());
 		setIsLoading(false);
@@ -49,12 +49,6 @@ const AllBoardsScreen = () => {
 	const onCloseModal = () => {
 		dispatch(closeModal());
 	}
-
-	useEffect(() => {
-		return () => {
-			console.log('asd');
-		}
-	}, []);
 
 	const openModal = () => {
 		dispatch(changeModalData({
@@ -89,7 +83,10 @@ const AllBoardsScreen = () => {
 	const filteredBoards = !!searchInputText.length ? searchedBoards : boardsTypeValues;
 
 	const selectBoard = (boardId) => {
-		dispatch(changeBoardsData({selectedBoardId: boardId}))
+		dispatch(changeBoardsData({selectedBoardId: boardId}));
+		setTimeout(() => {
+			navigation.dispatch(jumpToAction);
+		}, 0);
 	}
 
 	const boardsComponents = filteredBoards.map(item => {
@@ -110,11 +107,11 @@ const AllBoardsScreen = () => {
 		);
 	});
 
-	const galleryComponent = <Gallery components={boardsComponents} noComponentsText={languageWords.noBoards} />;
+	const galleryComponent = <Gallery components={boardsComponents} noComponentsText="noBoards" />;
 
 	return (
 		<View style={styles.container}>
-			<CustomInput propsStyles={{input: {marginBottom: 0}}} text={searchInputText} onChangeText={onChangeSearchText} placeholder={'Search by board title'} />
+			<CustomInput propsStyles={{input: {marginBottom: 0}}} text={searchInputText} onChangeText={onChangeSearchText} placeholder={'Search by title'} />
 			<View style={styles.boardsContainer}>
 				<CustomScrollView component={galleryComponent} />
 			</View>

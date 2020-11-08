@@ -7,7 +7,6 @@ import {generalStyles} from "../constants/theme";
 const CustomButton = ({ text, onPress, disable, propsStyles = {} }) => {
 	const currentTheme = useSelector(state => state.themeReducer.currentTheme);
   const Component = !onPress || disable ? View : TouchableOpacity;
-
   const disabledStyles = disable ? buttonStyles.disabledButton : {};
 
   return (
@@ -33,8 +32,8 @@ const buttonStyles = StyleSheet.create({
 		borderRadius: 4,
   },
   text: {
-		color: 'white',
-		fontSize: 13,
+		color: '#28b39c',
+		fontSize: 16,
   },
 	disabledButton: {
   	opacity: 0,

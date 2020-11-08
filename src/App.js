@@ -87,8 +87,8 @@ export default function App() {
       <Tab.Navigator >
         <Tab.Screen
           name='Boards'
-          component={AllBoardsScreen}
           options={{tabBarIcon: ({color}) => <BoardsIcon color={color} />}}
+          component={AllBoardsScreen}
         />
         {
           selectedBoardId &&
@@ -99,8 +99,8 @@ export default function App() {
           />
         }
         <Tab.Screen
-          options={{tabBarIcon: ({color}) => <SettingsIcon color={color}/>}}
           name='Settings'
+          options={{tabBarIcon: ({color}) => <SettingsIcon color={color}/>}}
           component={SettingsScreen}
         />
       </Tab.Navigator>

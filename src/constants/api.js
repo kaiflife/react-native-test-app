@@ -5,8 +5,9 @@ const usersRoute = `${apiUrl}/users`;
 const authUrl = `${usersRoute}/auth`;
 const registrationUrl = `${usersRoute}/registration`;
 const tasksUrl = `${apiUrl}/tasks`;
-const columnsUrl = `${apiUrl}/columns`;
 const boardsUrl = `${apiUrl}/boards`;
+const columnsUrl = `${apiUrl}/columns`;
+const cardsUrl = `${apiUrl}/cards`;
 
 const logoutUrl = `${usersRoute}/logout`;
 
@@ -21,4 +22,5 @@ export {
   usersRoute,
   refreshTokenUrl,
   logoutUrl,
+  cardsUrl,
 };

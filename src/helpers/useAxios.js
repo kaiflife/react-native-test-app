@@ -77,14 +77,11 @@ const useAxios = async ({url, params, body, method, multipartConfig, accessToken
       if(tokenResponse && !tokenResponse.response){
         throw tokenResponse;
       }
-      const errorMessage = tokenResponse.response.data.message;
-      if(errorMessage === INVALID_TOKEN || errorMessage === JWT_EXPIRED) {
-        dispatch(changeAuthData({
-          accessToken: null, refreshToken: null
-        }));
-        await _clearStoreData();
-        return;
-      }
+      dispatch(changeAuthData({
+        accessToken: null, refreshToken: null
+      }));
+      await _clearStoreData();
+      return;
     }
     if(error && error.response && error.response.data) {
       const errorMessage = error.response.data.message;
@@ -104,7 +101,7 @@ const useAxios = async ({url, params, body, method, multipartConfig, accessToken
       }
     }
     if(!tokenRefreshPromise){
-      tokenRefreshPromise = updateToken();
+      tokenRefreshPromise = await updateToken();
     }
     const newToken = await tokenRefreshPromise;
     tokenRefreshPromise = null;
@@ -113,6 +110,7 @@ const useAxios = async ({url, params, body, method, multipartConfig, accessToken
 }
 
 export const anyAxios = (props) => (dispatch, getState) => {
+  console.log(props);
   const {accessToken, refreshToken} = getState().authReducer;
   return useAxios({...props, accessToken, refreshToken, dispatch });
 }
